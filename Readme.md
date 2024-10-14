@@ -26,5 +26,5 @@ Goal: Create a vector graphic editor with design patterns applied.
 # Current Plans
 1. Create a minimum viable product with a simple class design. (10.13)
    1. Research how vector graphics are different from raster graphics and if thereare vector graphics libraries in Java that can be used.
-   2. Narrow down the requirements to build an MVP.
+   2. Narrow down the requirements to build an MVP. Benchmark Figma for general functionalities.
 
