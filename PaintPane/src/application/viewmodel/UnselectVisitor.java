@@ -5,7 +5,7 @@ import model.Element;
 
 public class UnselectVisitor implements Visitor {
 	private static UnselectVisitor instance = new UnselectVisitor();
-	private Adapter adapter = Adapter.getInstance();
+	private NodeEventHandler adapter = NodeEventHandler.getInstance();
 	
 	@Override
 	public void handleLeaf(Element element) {

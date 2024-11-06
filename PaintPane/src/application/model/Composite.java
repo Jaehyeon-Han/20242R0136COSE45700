@@ -16,12 +16,14 @@ public class Composite extends Element {
 		y2 = Math.max(y2, element.y2);
 		children.add(element);
 	}
-
-	public void remove(Element element) {
-		children.remove(element);
-		if(element.x1 == x1 || element.y1 == y1 || element.x2 == x2 || element.y2 == y2) {
-			update();
-		}
+//	public void remove(Element element) {
+//		children.remove(element);
+//		if(element.x1 == x1 || element.y1 == y1 || element.x2 == x2 || element.y2 == y2) {
+//			update();
+//		}
+//	}
+	public List<Element> getChildren() {
+		return this.children;
 	}
 	
 	public Composite() {
@@ -39,8 +41,14 @@ public class Composite extends Element {
 		y1 += dy;
 		x2 += dx;
 		y2 += dy;
+		notifyObservers();
 	}
-	
+	@Override
+	public void setColor(Color color) {
+		for(Element element : children) {
+			element.setColor(color);
+		}
+	}
 	@Override
 	public void resize(double width, double height) {
 		double originalWidth = x2 - x1;
@@ -61,21 +69,18 @@ public class Composite extends Element {
 		}
 		
 		x2 = x1 + width;
-		y2 = y2 + height;
+		y2 = y1 + height;
+		notifyObservers();
 	}
-	
-	public List<Element> getChildren() {
-		return this.children;
-	}
-	
-	private void update() {
-		for(Element element : children) {
-			x1 = Math.min(x1, element.x1);
-			y1 = Math.min(y1, element.y1);
-			x2 = Math.max(x2, element.x2);
-			y2 = Math.max(y2, element.y2);
-		}
-	}
+//	private void update() {
+//		for(Element element : children) {
+//			x1 = Math.min(x1, element.x1);
+//			y1 = Math.min(y1, element.y1);
+//			x2 = Math.max(x2, element.x2);
+//			y2 = Math.max(y2, element.y2);
+//		}
+//		notifyObservers();
+//	}
 	
 	@Override
 	public void accept(Visitor visitor) {

@@ -11,7 +11,7 @@ class ResizeTest {
 	
 	@Test
 	void RectangleTest() {
-		Rectangle rect = (Rectangle) factory.create("rectangle", 30, 200, 50, 150);
+		Rectangle rect = (Rectangle) factory.create(Type.RECTANGLE, 30, 200, 50, 150);
 		rect.resize(100, 300);
 		assertEquals(rect.getX2(), 130, "X2");
 		assertEquals(rect.getY2(), 450, "Y2");
@@ -19,7 +19,7 @@ class ResizeTest {
 	
 	@Test
 	void LineTest() {
-		Line line = (Line) factory.create("line", 30, 200, 50, 150);
+		Line line = (Line) factory.create(Type.LINE, 30, 200, 50, 150);
 		line.resize(25, 100);
 		assertEquals(line.getX2() - line.getX1(), 40, "width");
 		assertEquals(Math.abs(line.getY2() - line.getY1()), 100, "height");
@@ -27,8 +27,8 @@ class ResizeTest {
 	
 	@Test
 	void CompositeTest() {
-		Rectangle rect1 = (Rectangle) factory.create("rectangle", 10, 10, 30, 30);
-		Rectangle rect2 = (Rectangle) factory.create("rectangle", 20, 20, 40, 40);
+		Rectangle rect1 = (Rectangle) factory.create(Type.RECTANGLE, 10, 10, 30, 30);
+		Rectangle rect2 = (Rectangle) factory.create(Type.RECTANGLE, 20, 20, 40, 40);
 		List<Element> list = new ArrayList<Element>();
 		list.add(rect1);
 		list.add(rect2);

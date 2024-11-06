@@ -1,36 +1,35 @@
 package view;
 
-import java.awt.event.ActionEvent;
+import java.io.File;
+
+import viewmodel.EventHandler;
+import viewmodel.ViewUpdater;
 
 import javafx.application.Application;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import viewmodel.Adapter;
-import viewmodel.ViewModel;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class View extends Application {
-	private static ViewModel viewModel;
+	private static EventHandler viewModel;
 	private Pane paintPane;
+    GridPane emptyWindow = new GridPane();
+    GridPane propertyWindow;
+    private VBox windowsContainer;
+    
     private static final int CLICK_THRESHOLD = 5; 
     // Threshold in pixels to distinguish between click and drag
     private double initialX = 0;
@@ -38,26 +37,30 @@ public class View extends Application {
     private Rectangle selectionBox;
     private Rectangle selectedBox;
     private boolean isSelected = false;
-    private double xValue;
-    GridPane emptyWindow = new GridPane();
-    GridPane propertyWindow;
+//    private boolean inTextMode = false; 
+    
     private TextField selectedX;
     private TextField selectedY;
     private TextField selectedWidth;
     private TextField selectedHeight;
     private ColorPicker selectedColor;
-	private Double yValue;
-	private Double width;
-	private Double height;
-	private VBox windowsContainer;
     
+    private double xValue;
+    private double yValue;
+	private double width;
+	private double height;
+	private GridPane toolWindow;
+	private Button fowardButton;
+	private Button backwardButton;
+	
+
 	@Override
 	public void start(Stage primaryStage) {
-		Adapter.getInstance().setView(this);
+		ViewUpdater.getInstance().setView(this);
 		Initialize(primaryStage);
 	}
 
-	public static void begin(String[] args, ViewModel viewModel) {
+	public static void begin(String[] args, EventHandler viewModel) {
 		View.viewModel = viewModel;
 		View.launch(View.class, args);
 	}
@@ -67,7 +70,7 @@ public class View extends Application {
 		paintPane = createPaintPane();
 		windowsContainer = createVBox(300, 500);
 		propertyWindow = createGridPane(300, 350);
-		GridPane toolWindow = createGridPane(300, 150);
+		toolWindow = createGridPane(300, 150);
 		// TODO: 제네릭과 함수 사용하여 컴포넌트 만드는 과정 리팩터링
 
 		// A window for displaying properties of the selected item
@@ -107,19 +110,20 @@ public class View extends Application {
             }
         });
         selectedWidth = new TextField();
-        selectedWidth.focusedProperty().addListener((observable, oldValue, newValue) -> {
-        	String input = selectedWidth.getText();
-        	double value;
-        	if (!newValue) {
-            	try {
-            		value = Double.parseDouble(input);
-            	} catch(Exception e) {
-            		selectedWidth.setText(Double.toString(width));
-            		return;
-            	}
-                 viewModel.changeWidth(value);
+        selectedWidth.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String input = selectedWidth.getText();
+                double value;
+                try {
+                    value = Double.parseDouble(input);
+                } catch (Exception e) {
+                    selectedWidth.setText(Double.toString(width));
+                    return;
+                }
+                viewModel.changeWidth(value);
             }
         });
+
         selectedHeight = new TextField();
         selectedHeight.focusedProperty().addListener((observable, oldValue, newValue) -> {
         	String input = selectedHeight.getText();
@@ -151,35 +155,32 @@ public class View extends Application {
 		Button selectButton = new Button("Select");
 		selectButton.setPrefSize(100, 40);
 		selectButton.setOnAction(actionEvent -> {
-			viewModel.selectSelectionTool();
+			viewModel.selectSelectMode();
 		});
 		toolWindow.add(selectButton, 1, 0);
 		Button createButton = new Button("Create");
 		createButton.setPrefSize(100, 40);
 		createButton.setOnAction(actionEvent -> {
-			viewModel.selectCreationTool();
+			viewModel.selectCreateMode();
 		});
 		toolWindow.add(createButton, 0, 0);
 		ComboBox<String> shapeComboBox = new ComboBox<String>();
 		shapeComboBox.getItems().addAll("line", "rectangle", "ellipse", "image", "text");
 		shapeComboBox.setValue("line");
 		shapeComboBox.setOnAction(actionEvent -> {
+			if(shapeComboBox.getValue().equals("image")) {
+				FileChooser fileChooser = new FileChooser();
+	            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+	            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+	            if (selectedFile != null) {
+	                selectedFile.getAbsolutePath();
+	                viewModel.setImageFile(selectedFile);
+	            }
+			}
 			viewModel.selectType(shapeComboBox.getValue());
 		});
-		Button fowardButton = new Button("Forward");
-		fowardButton.setPrefSize(100, 40);
-		fowardButton.setOnAction(actionEvent -> {
-			viewModel.foward();
-		});
-		Button backwardButton = new Button("Backward");
-		backwardButton.setPrefSize(100, 40);
-		backwardButton.setOnAction(actionEvent -> {
-			viewModel.foward();
-		});
-		
-		// TODO: image and text
-
 		toolWindow.add(shapeComboBox, 0, 1);
+		
 		ColorPicker colorPicker = new ColorPicker();
 		colorPicker.setValue(Color.BLACK);
 		colorPicker.setOnAction(actionEvent -> {
@@ -190,6 +191,19 @@ public class View extends Application {
 			viewModel.selectColor((int) r, (int) g, (int) b);
 		});
 		toolWindow.add(colorPicker, 1, 1);
+		
+		fowardButton = new Button("Forward");
+		fowardButton.setPrefSize(100, 40);
+		fowardButton.setOnAction(actionEvent -> {
+			viewModel.forward();
+		});
+		
+		backwardButton = new Button("Backward");
+		backwardButton.setPrefSize(100, 40);
+		backwardButton.setOnAction(actionEvent -> {
+			viewModel.backward();
+		});
+		
 		windowsContainer.getChildren().addAll(emptyWindow, toolWindow);
 
 		BorderPane container = new BorderPane();
@@ -268,14 +282,18 @@ public class View extends Application {
 		if(selected) {
 			windowsContainer.getChildren().remove(emptyWindow);
 			windowsContainer.getChildren().add(0, propertyWindow);
+			toolWindow.add(fowardButton, 0, 2);
+			toolWindow.add(backwardButton, 1, 2);
 		} else {
 			windowsContainer.getChildren().remove(propertyWindow);
 			windowsContainer.getChildren().add(0, emptyWindow);
+			toolWindow.getChildren().remove(fowardButton);
+			toolWindow.getChildren().remove(backwardButton);
 		}
 	}
 	
-	public void attachSelectedBox(double x1, double y1, double x2, double y2) {
-		selectedBox = new Rectangle(x1, y1, x2-x1, y2-y1);
+	public void attachSelectedBox(double x1, double y1, double width, double height) {
+		selectedBox = new Rectangle(x1, y1, width, height);
 		selectedBox.setStroke(Color.BLUE);
 		selectedBox.setFill(Color.TRANSPARENT);
         paintPane.getChildren().add(selectedBox);
@@ -285,27 +303,31 @@ public class View extends Application {
 	}
 	public void moveSelectedBox(double dx, double dy) {
 		selectedBox.setLayoutX(selectedBox.getLayoutX() + dx);
-		selectedBox.setLayoutY(selectedBox.getLayoutY() + dy);
+	    selectedBox.setLayoutY(selectedBox.getLayoutY() + dy);
 	}
 
-	public void updateX(Double value) {
+	public void updateX(double value) {
 		xValue = value;
 		selectedX.setText(Double.toString(value));
 	}
-	public void updateY(Double value) {
+	public void updateY(double value) {
 		yValue = value;
 		selectedY.setText(Double.toString(value));
 	}
-	public void updateWidth(Double value) {
+	public void updateWidth(double value) {
 		width = value;
 		selectedWidth.setText(Double.toString(value));
 	}
-	public void updateHeight(Double value) {
+	public void updateHeight(double value) {
 		height = value;
 		selectedHeight.setText(Double.toString(value));
 	}
-	
 	public void updateColor(Color color) {
 		selectedColor.setValue(color);
+	}
+	
+	public void reOrder(Node node, int index) {
+		paintPane.getChildren().remove(node);
+		paintPane.getChildren().add(index, node);
 	}
 }

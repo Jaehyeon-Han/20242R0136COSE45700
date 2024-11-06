@@ -33,6 +33,10 @@ public class Element {
 	public void addObserver(Observer observer) {
 		observers.add(observer);
 	}
+	public void removeObserver(Observer observer) {
+		observers.remove(observer);
+	}
+	
 	
 	public void notifyObservers() {
 		for(Observer observer: observers) {
@@ -93,5 +97,13 @@ public class Element {
 	
 	public void accept(Visitor visitor) {
 		visitor.handleLeaf(this);
+	}
+	
+	public double getWidth() {
+		return Math.abs(x1 - x2);
+	}
+	
+	public double getHeight() {
+		return Math.abs(y1 - y2);
 	}
 }

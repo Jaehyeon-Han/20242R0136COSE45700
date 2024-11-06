@@ -5,7 +5,7 @@ import model.Element;
 
 public class SelectVisitor implements Visitor {
 	private static SelectVisitor instance = new SelectVisitor();
-	private Adapter adapter = Adapter.getInstance();
+	private NodeEventHandler adapter = NodeEventHandler.getInstance();
 	
 	@Override
 	public void handleLeaf(Element element) {

@@ -1,15 +1,9 @@
 import view.View;
-import viewmodel.Adapter;
-import viewmodel.CreationTool;
-import viewmodel.SelectionTool;
-import viewmodel.ViewModel;
+import viewmodel.EventHandler;
 
 public class Main {
 	public static void main(String[] args) {
-		ViewModel viewModel = new ViewModel();
-		Adapter.getInstance().setViewModel(viewModel);
-		CreationTool.getInstance().setViewModel(viewModel);
-		SelectionTool.getInstance().setViewModel(viewModel);
+		EventHandler viewModel = new EventHandler();
 		View.begin(args, viewModel);
 	}
 }
