@@ -82,30 +82,30 @@ public class View extends Application {
 		Label[] labelArray = {xLabel, yLabel, widthLabel, heightLabel, colorLabel};
 		
         selectedX = new TextField();
-        selectedX.focusedProperty().addListener((observable, oldValue, newValue) -> {
-        	String input = selectedX.getText();
-        	double value;
-        	if (!newValue) {
-            	try {
-            		value = Double.parseDouble(input);
-            	} catch(Exception e) {
-            		selectedX.setText(Double.toString(xValue));
-            		return;
-            	}
+        selectedX.setOnKeyPressed(event -> {
+        	if (event.getCode() == KeyCode.ENTER) {
+                String input = selectedX.getText();
+                double value;
+                try {
+                    value = Double.parseDouble(input);
+                } catch (Exception e) {
+                	selectedX.setText(Double.toString(xValue));
+                    return;
+                }
                  viewModel.changeX(value);
             }
         });
         selectedY = new TextField();
-        selectedY.focusedProperty().addListener((observable, oldValue, newValue) -> {
-        	String input = selectedY.getText();
-        	double value;
-        	if (!newValue) {
-            	try {
-            		value = Double.parseDouble(input);
-            	} catch(Exception e) {
-            		selectedY.setText(Double.toString(yValue));
-            		return;
-            	}
+        selectedY.setOnKeyPressed(event -> {
+        	if (event.getCode() == KeyCode.ENTER) {
+                String input = selectedY.getText();
+                double value;
+                try {
+                    value = Double.parseDouble(input);
+                } catch (Exception e) {
+                	selectedY.setText(Double.toString(yValue));
+                    return;
+                }
                  viewModel.changeY(value);
             }
         });
@@ -125,16 +125,16 @@ public class View extends Application {
         });
 
         selectedHeight = new TextField();
-        selectedHeight.focusedProperty().addListener((observable, oldValue, newValue) -> {
-        	String input = selectedHeight.getText();
-        	double value;
-        	if (!newValue) {
-            	try {
-            		value = Double.parseDouble(input);
-            	} catch(Exception e) {
-            		selectedHeight.setText(Double.toString(height));
-            		return;
-            	}
+        selectedHeight.setOnKeyPressed(event -> {
+        	if (event.getCode() == KeyCode.ENTER) {
+                String input = selectedHeight.getText();
+                double value;
+                try {
+                    value = Double.parseDouble(input);
+                } catch (Exception e) {
+                	selectedHeight.setText(Double.toString(height));
+                    return;
+                }
                  viewModel.changeHeight(value);
             }
         });

@@ -4,7 +4,7 @@ public class Line extends Element {
 	private static final double dThreshold = 10;
 	
 	public Line(double x1, double y1, double x2, double y2, Color color) {
-		super();
+		super(x1, y1, x2, y2);
 		if(x1 > x2) {
 			this.x1 = x2;
 			this.y1 = y2;

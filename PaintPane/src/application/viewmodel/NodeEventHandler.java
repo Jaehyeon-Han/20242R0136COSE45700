@@ -44,8 +44,6 @@ public class NodeEventHandler implements Observer {
 		selectedElement.accept(unselectVisitor);
 		status.setSelectedElement(null);
 		viewUpdater.unselect();
-//		view.changeSelectStatus(false);
-//		view.detachSelectedBox();
 	}
 	public void selectViewUpdate(Element element) {
 		FxNode matchingNode = map.get(element);
@@ -53,7 +51,7 @@ public class NodeEventHandler implements Observer {
 	}
 	public void unselectViewUpdate(Element element) {
 		FxNode matchingNode = map.get(element);
-		viewUpdater.selectNode(matchingNode);
+		viewUpdater.unSelectNode(matchingNode);
 	}
 
 	public void create(double startX, double startY, double endX, double endY) {

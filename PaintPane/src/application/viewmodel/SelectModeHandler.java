@@ -12,7 +12,7 @@ public class SelectModeHandler implements MoustEventHandler {
 		return instance;
 	}
 	
-	private NodeEventHandler adapter = NodeEventHandler.getInstance();
+	private NodeEventHandler nodeEventHandler = NodeEventHandler.getInstance();
 	private ProgramStatus status;
 	public void setProgramStatus(ProgramStatus status) {
 		this.status = status;
@@ -35,14 +35,14 @@ public class SelectModeHandler implements MoustEventHandler {
 			for (int i = status.getShapes().size() - 1; i >= 0; --i) {
 				Element element = status.getShapes().get(i);
 				if (element.isInHere(x, y)) {
-					adapter.unselect();
-					adapter.select(element);
+					nodeEventHandler.unselect();
+					nodeEventHandler.select(element);
 					found = true;
 					break;
 				}
 			} // 새로운 도형 선택
 			if (!found) {
-				adapter.unselect();
+				nodeEventHandler.unselect();
 			} // 빈 공간 클릭
 		}
 	}
@@ -53,7 +53,7 @@ public class SelectModeHandler implements MoustEventHandler {
 		endY = y;
 		
 		if (status.isElementSelected()) {
-			adapter.move(endX - startX, endY - startY);
+			nodeEventHandler.move(endX - startX, endY - startY);
 		} else {
 			ArrayList<Element> toSelectShapes = new ArrayList<>();
 			makeBoundBox(); // Make sure startX <= endX, startY <= endY
@@ -67,7 +67,7 @@ public class SelectModeHandler implements MoustEventHandler {
 			}
 			Composite composite = ElementFactory.getInstance().createComposite(toSelectShapes);
 			composite.addObserver(ViewUpdater.getInstance());
-			adapter.select(composite);
+			nodeEventHandler.select(composite);
 		}
 	}
 

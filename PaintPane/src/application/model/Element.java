@@ -14,6 +14,17 @@ public class Element {
 	protected Color color;
 	private List<Observer> observers = new ArrayList<>();
 	
+	public Element(double x1, double y1, double x2, double y2) {
+		this.x1 = Math.min(x1, x2);
+		this.y1 = Math.min(y1, y2);
+		this.x2 = Math.max(x1, x2);
+		this.y2 = Math.max(y1, y2);
+	}
+	
+	public Element() {
+		// Do nothing
+	}
+	
 	public double getX1() {
 		return x1;
 	}
@@ -30,31 +41,6 @@ public class Element {
 		return y2;
 	}
 
-	public void addObserver(Observer observer) {
-		observers.add(observer);
-	}
-	public void removeObserver(Observer observer) {
-		observers.remove(observer);
-	}
-	
-	
-	public void notifyObservers() {
-		for(Observer observer: observers) {
-			observer.onChanged(this);
-		}
-	}
-	
-	public Element(double x1, double y1, double x2, double y2) {
-		this.x1 = Math.min(x1, x2);
-		this.y1 = Math.min(y1, y2);
-		this.x2 = Math.max(x1, x2);
-		this.y2 = Math.max(y1, y2);
-	}
-	
-	public Element() {
-		// Do nothing
-	}
-	
 	public Color getColor() {
 		return color;
 	}
@@ -62,6 +48,32 @@ public class Element {
 	public void setColor(Color color) {
 		this.color = color;
 		notifyObservers();
+	}
+	
+	public double getWidth() {
+		return Math.abs(x1 - x2);
+	}
+	
+	public double getHeight() {
+		return Math.abs(y1 - y2);
+	}
+	
+	public void addObserver(Observer observer) {
+		observers.add(observer);
+	}
+	public void removeObserver(Observer observer) {
+		observers.remove(observer);
+	}
+	
+	public void notifyObservers() {
+		for(Observer observer: observers) {
+			observer.onChanged(this);
+		}
+	}
+	
+	
+	public void accept(Visitor visitor) {
+		visitor.handleLeaf(this);
 	}
 	
 	public void move(double dx, double dy) {
@@ -78,9 +90,9 @@ public class Element {
 		notifyObservers();
 	}
 	
-	public String toString() {
-		return "x1: " + x1 + ", y1: " + y1 + ", x2: " + x2 + ", y2: " + y2; 
-	}
+//	public String toString() {
+//		return "x1: " + x1 + ", y1: " + y1 + ", x2: " + x2 + ", y2: " + y2; 
+//	}
 	
 	public boolean isInHere(double x, double y) {
 		System.out.println(toString());
@@ -94,16 +106,4 @@ public class Element {
                  y1 > this.y2 || 
                  y2 < this.y1);
     }
-	
-	public void accept(Visitor visitor) {
-		visitor.handleLeaf(this);
-	}
-	
-	public double getWidth() {
-		return Math.abs(x1 - x2);
-	}
-	
-	public double getHeight() {
-		return Math.abs(y1 - y2);
-	}
 }
