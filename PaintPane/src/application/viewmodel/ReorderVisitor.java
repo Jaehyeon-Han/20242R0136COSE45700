@@ -8,7 +8,7 @@ import model.Element;
 
 public class ReorderVisitor implements Visitor {
 	private static ReorderVisitor instance = new ReorderVisitor();
-	private NodeEventHandler adapter = NodeEventHandler.getInstance();
+	private NodeEventHandler nodeEventHandler = NodeEventHandler.getInstance();
 	private int direction;
 	private ArrayList<Element> shapes;
 	static int lastCheckedIndex;
@@ -19,7 +19,7 @@ public class ReorderVisitor implements Visitor {
 		if(direction == 1) {
 			for (int i = lastCheckedIndex; i >= 0 ; --i) {
 				if(element == shapes.get(i)) {
-					adapter.reOrderViewUpdate(element, i+1);
+					nodeEventHandler.reOrderViewUpdate(element, i+1);
 					swap(i, i+1);
 					lastCheckedIndex = i;
 					return;
@@ -29,7 +29,7 @@ public class ReorderVisitor implements Visitor {
 		} else {
 			for (int i = lastCheckedIndex; i <= shapes.size() - 1; ++i) {
 				if(element == shapes.get(i)) {
-					adapter.reOrderViewUpdate(element, i-1);
+					nodeEventHandler.reOrderViewUpdate(element, i-1);
 					swap(i, i-1);
 					lastCheckedIndex = i;
 					return;

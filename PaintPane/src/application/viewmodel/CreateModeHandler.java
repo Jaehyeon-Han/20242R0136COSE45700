@@ -7,7 +7,7 @@ public class CreateModeHandler implements MoustEventHandler {
 		return instance;
 	}
 	
-	private NodeEventHandler adapter = NodeEventHandler.getInstance();
+	private NodeEventHandler nodeEventHandler = NodeEventHandler.getInstance();
 	
 	private double startX, startY, endX, endY;
 	
@@ -21,6 +21,6 @@ public class CreateModeHandler implements MoustEventHandler {
 	public void handleReleased(double x, double y) {
 		endX = x;
 		endY = y;
-		adapter.create(startX, startY, endX, endY);
+		nodeEventHandler.create(startX, startY, endX, endY);
 	}
 }

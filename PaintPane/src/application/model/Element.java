@@ -95,7 +95,6 @@ public class Element {
 //	}
 	
 	public boolean isInHere(double x, double y) {
-		System.out.println(toString());
 		return Math.min(x1, x2) <= x && x <= Math.max(x1, x2)
 				&& Math.min(y1, y2) <= y && y <= Math.max(y1, y2);
 	}

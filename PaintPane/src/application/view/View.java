@@ -24,7 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class View extends Application {
-	private static EventHandler viewModel;
+	private static EventHandler eventHandler;
 	private Pane paintPane;
     GridPane emptyWindow = new GridPane();
     GridPane propertyWindow;
@@ -61,7 +61,7 @@ public class View extends Application {
 	}
 
 	public static void begin(String[] args, EventHandler viewModel) {
-		View.viewModel = viewModel;
+		View.eventHandler = viewModel;
 		View.launch(View.class, args);
 	}
 
@@ -92,7 +92,7 @@ public class View extends Application {
                 	selectedX.setText(Double.toString(xValue));
                     return;
                 }
-                 viewModel.changeX(value);
+                 eventHandler.changeX(value);
             }
         });
         selectedY = new TextField();
@@ -106,7 +106,7 @@ public class View extends Application {
                 	selectedY.setText(Double.toString(yValue));
                     return;
                 }
-                 viewModel.changeY(value);
+                 eventHandler.changeY(value);
             }
         });
         selectedWidth = new TextField();
@@ -120,7 +120,7 @@ public class View extends Application {
                     selectedWidth.setText(Double.toString(width));
                     return;
                 }
-                viewModel.changeWidth(value);
+                eventHandler.changeWidth(value);
             }
         });
 
@@ -135,7 +135,7 @@ public class View extends Application {
                 	selectedHeight.setText(Double.toString(height));
                     return;
                 }
-                 viewModel.changeHeight(value);
+                 eventHandler.changeHeight(value);
             }
         });
         selectedColor = new ColorPicker();
@@ -144,7 +144,7 @@ public class View extends Application {
 			double r = color.getRed() * 255;
 			double g = color.getGreen() * 255;
 			double b = color.getBlue() * 255;
-			viewModel.changeColor((int) r, (int) g, (int) b);
+			eventHandler.changeColor((int) r, (int) g, (int) b);
 		});
         Node[] valueArray = {selectedX, selectedY, selectedWidth, selectedHeight, selectedColor};
         for(int i = 0; i < labelArray.length; ++i) {
@@ -155,13 +155,13 @@ public class View extends Application {
 		Button selectButton = new Button("Select");
 		selectButton.setPrefSize(100, 40);
 		selectButton.setOnAction(actionEvent -> {
-			viewModel.selectSelectMode();
+			eventHandler.selectSelectMode();
 		});
 		toolWindow.add(selectButton, 1, 0);
 		Button createButton = new Button("Create");
 		createButton.setPrefSize(100, 40);
 		createButton.setOnAction(actionEvent -> {
-			viewModel.selectCreateMode();
+			eventHandler.selectCreateMode();
 		});
 		toolWindow.add(createButton, 0, 0);
 		ComboBox<String> shapeComboBox = new ComboBox<String>();
@@ -174,10 +174,10 @@ public class View extends Application {
 	            File selectedFile = fileChooser.showOpenDialog(primaryStage);
 	            if (selectedFile != null) {
 	                selectedFile.getAbsolutePath();
-	                viewModel.setImageFile(selectedFile);
+	                eventHandler.setImageFile(selectedFile);
 	            }
 			}
-			viewModel.selectType(shapeComboBox.getValue());
+			eventHandler.selectType(shapeComboBox.getValue());
 		});
 		toolWindow.add(shapeComboBox, 0, 1);
 		
@@ -188,20 +188,20 @@ public class View extends Application {
 			double r = color.getRed() * 255;
 			double g = color.getGreen() * 255;
 			double b = color.getBlue() * 255;
-			viewModel.selectColor((int) r, (int) g, (int) b);
+			eventHandler.selectColor((int) r, (int) g, (int) b);
 		});
 		toolWindow.add(colorPicker, 1, 1);
 		
 		fowardButton = new Button("Forward");
 		fowardButton.setPrefSize(100, 40);
 		fowardButton.setOnAction(actionEvent -> {
-			viewModel.forward();
+			eventHandler.forward();
 		});
 		
 		backwardButton = new Button("Backward");
 		backwardButton.setPrefSize(100, 40);
 		backwardButton.setOnAction(actionEvent -> {
-			viewModel.backward();
+			eventHandler.backward();
 		});
 		
 		windowsContainer.getChildren().addAll(emptyWindow, toolWindow);
@@ -239,8 +239,7 @@ public class View extends Application {
 		paintPane.setOnMousePressed(event -> {
 			initialX = event.getX();
 	        initialY = event.getY();
-			viewModel.handleMousePressed(event.getX(), event.getY());
-			System.out.println("pane: X - " + initialX + ", Y - " + initialY);
+			eventHandler.handleMousePressed(event.getX(), event.getY());
 			if(!isSelected) {
 				selectionBox = new Rectangle(initialX, initialY, 0, 0);
 	            selectionBox.setStroke(Color.BLUE);
@@ -266,7 +265,7 @@ public class View extends Application {
 	        double deltaY = event.getY() - initialY;
 
 	        if (Math.abs(deltaX) > CLICK_THRESHOLD || Math.abs(deltaY) > CLICK_THRESHOLD) {
-	        	viewModel.handleMouseReleased(event.getX(), event.getY());
+	        	eventHandler.handleMouseReleased(event.getX(), event.getY());
 	        }
 	        paintPane.getChildren().remove(selectionBox);
 		});
