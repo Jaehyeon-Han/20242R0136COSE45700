@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import common.Point;
 import common.PropertyDTO;
 
 import model.Element;
@@ -13,7 +14,7 @@ import model.ElementFactory;
 
 public class ElementManager {
     private List<Element> elements = new ArrayList<>();
-    private Map<String, Element> idMap = new HashMap<>();
+    private Map<Element, String> idMap = new HashMap<>();
     private ElementFactory factory = ElementFactory.getInstance();
 
     public PropertyDTO create(PropertyDTO dto) {
@@ -27,13 +28,17 @@ public class ElementManager {
         );
 
         String idString = UUID.randomUUID().toString(); 
-        idMap.put(idString, newElement);
+        idMap.put(newElement, idString);
         elements.add(newElement);
         return newElement.toDTO();
     }
-
-    public Element getElementById(String id) {
-        return idMap.get(id);
+    
+    public String getElementId(Element element) {
+    	return idMap.get(element);
+    }
+    
+    public List<Element> getAllElements() {
+    	return elements;
     }
     
     // Singleton
@@ -46,4 +51,6 @@ public class ElementManager {
     public static ElementManager getInstance() {
         return ShapeManagerHelper.INSTANCE;
     }
+
+	
 }

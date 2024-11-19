@@ -7,7 +7,7 @@ import java.util.Map;
 
 import common.Observer;
 import common.PropertyDTO;
-
+import javafx.scene.shape.Rectangle;
 import view.FxModel.FxElement;
 import view.FxModel.FxElementFactory;
 
@@ -33,13 +33,12 @@ public class FxElementManager implements Observer {
         
         drawingPane.add(newElement);
 	}
-
+	
 	@Override
 	public void onChange(PropertyDTO dto) {
 		FxElement changedElement = idMap.get(dto.getId());
 		updateElement(changedElement, dto);
 	}
-	
 	
 	private void updateElement(FxElement changedElement, PropertyDTO dto) {
 		double x1 = dto.getP().getX();

@@ -4,16 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import common.Observer;
+import common.Point;
 import common.PropertyDTO;
 import model.Element;
 
 public class Controller {
-	ElementManager shapeManager = ElementManager.getInstance();
+	ElementManager elementManager = ElementManager.getInstance();
+	ElementSelector elementSelector = ElementSelector.getInstance();
 	List<Observer> observers = new ArrayList<>();
 
 	public void createElement(PropertyDTO dto) {
-		PropertyDTO newElementDTO = shapeManager.create(dto);
+		PropertyDTO newElementDTO = elementManager.create(dto);
 		notifyOnCreate(newElementDTO);
+	}
+	
+	public void select(Point p) {
+		PropertyDTO newElementDTO = elementSelector.select(p);
+		notifyOnSelect(newElementDTO);
+	} // 선택 안 된 경우 null 반환
+	
+
+
+	public void select(Point p, Point q) {
+		
 	}
 	
     public void addObserver(Observer observer) {
@@ -35,4 +48,11 @@ public class Controller {
             observer.onChange(dto);
         }
     }
+    
+	private void notifyOnSelect(PropertyDTO dto) {
+		for (Observer observer : observers) {
+            observer.onSelect(dto);
+        }
+	}
+	
 }

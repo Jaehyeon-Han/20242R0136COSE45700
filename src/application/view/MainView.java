@@ -9,19 +9,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class MainView extends Application {
+public class MainView extends Application implements Observer {
 	private DrawingPane drawingPane;
 	private PropertyWindow propertyWindow;
 	private ToolWindow toolWindow;
-	private GridPane emptyPropertyWindow; // 도형이 선택되면 propertyWindow로 바꿔줘야 함
+	private GridPane emptyPropertyWindow;
+	private VBox windowsContainer;
 	
 	@Override
 	public void start(Stage primaryStage) {
-		initialize(primaryStage);
-	}
-
-	
-	private void initialize(Stage primaryStage) {
 		drawingPane = new DrawingPane();
 		FxElementManager.getInstance().setDrawingPane(drawingPane);
 		toolWindow = new ToolWindow(drawingPane, primaryStage, 300, 150);
@@ -29,7 +25,7 @@ public class MainView extends Application {
 		propertyWindow = new PropertyWindow(300, 350);
 		emptyPropertyWindow = createEmptyWindow(300, 350);
 		
-		VBox windowsContainer = createVBox(300, 500);
+		windowsContainer = createVBox(300, 500);
 		windowsContainer.getChildren().addAll(emptyPropertyWindow, toolWindow);
 
 		BorderPane container = new BorderPane();
@@ -42,6 +38,19 @@ public class MainView extends Application {
 		primaryStage.setTitle("Graphics Editor");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+
+	@Override
+	public void onSelect(PropertyDTO dto) {
+		if(dto != null) {
+			windowsContainer.getChildren().remove(emptyPropertyWindow);
+			windowsContainer.getChildren().add(0, propertyWindow);
+		}
+		else {
+			windowsContainer.getChildren().remove(propertyWindow);
+			windowsContainer.getChildren().add(0, emptyPropertyWindow);
+		}
+		
 	}
 
 	private VBox createVBox(int width, int height) {

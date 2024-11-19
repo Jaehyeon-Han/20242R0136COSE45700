@@ -1,5 +1,9 @@
 package view;
 
+import common.Point;
+import controller.CommandInvoker;
+import controller.SingleSelectCommand;
+
 public class SelectState implements ToolState {
 	private double startX, startY, endX, endY;
 	private static final int CLICK_THRESHOLD = 10; 
@@ -21,7 +25,8 @@ public class SelectState implements ToolState {
         if (Math.abs(deltaX) > CLICK_THRESHOLD || Math.abs(deltaY) > CLICK_THRESHOLD) {
         	// 다중선택
         } else {
-        	// 단일선택
+        	CommandInvoker.getInstance()
+        	.execute(new SingleSelectCommand(new Point(startX, startY)));
         }
 	}
 	

@@ -4,29 +4,55 @@ import common.Color;
 import common.Point;
 
 public class FxEllipse extends javafx.scene.shape.Ellipse implements FxElement {
-
+	private Point topLeft, bottomRight;
+	
 	public FxEllipse(Point p, Point q, Color color) {
 		super((p.getX() + q.getX()) / 2, (p.getY() + q.getY()) / 2, 
 				(q.getX() - p.getX()) / 2, (q.getY() - p.getY()) / 2);
+		this.topLeft = p;
+		this.bottomRight = q;
 	}
 	
 	@Override
-	public void setX(double x) {
+	public void setP(Point p) {
+		this.topLeft = p;
+		update();
+	}
+
+	@Override
+	public void setQ(Point q) {
+		this.bottomRight = q;
+		update();
+	}
+	
+	public Point getP() {
+		return this.topLeft;
+	}
+	
+	public Point getQ() {
+		return this.bottomRight;
+	}
+	
+	private void update() {
+		setWidth(bottomRight.getX() - topLeft.getX());
+		setHeight(bottomRight.getY() - topLeft.getY());
+		setX(topLeft.getX());
+		setY(topLeft.getY());
+	}
+	
+	private void setX(double x) {
 		this.setCenterX(x + this.getRadiusX());
 	}
 	
-	@Override
-	public void setY(double y) {
+	private void setY(double y) {
 		this.setCenterY(y + this.getRadiusY());
 	}
 
-	@Override
-	public void setWidth(double width) {
+	private void setWidth(double width) {
 		setRadiusX(width / 2);
 	}
 
-	@Override
-	public void setHeight(double height) {
+	private void setHeight(double height) {
 		setRadiusY(height / 2);
 	}
 
@@ -34,4 +60,8 @@ public class FxEllipse extends javafx.scene.shape.Ellipse implements FxElement {
 	public void setColor(Color color) {
 		setFill(color.toFxColor());
 	}
+
+
+
+	
 }

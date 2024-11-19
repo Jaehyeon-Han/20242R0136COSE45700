@@ -1,16 +1,23 @@
 package controller;
 
+import common.Point;
+
 public class SingleSelectCommand implements Command {
+	private Controller controller;
+	private Point p;
+	
+	public SingleSelectCommand(Point p) {
+		this.p = p;
+	}
+	
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
+		controller.select(p);
 	}
 
 	@Override
 	public void setController(Controller controller) {
-		// TODO Auto-generated method stub
-		
+		this.controller = controller;
 	}
 	
 }

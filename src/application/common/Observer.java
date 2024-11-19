@@ -1,6 +1,7 @@
 package common;
 
 public interface Observer {
-	void onCreate(PropertyDTO dto);
-	void onChange(PropertyDTO dto);
+    default void onCreate(PropertyDTO dto) {}
+    default void onChange(PropertyDTO dto) {}
+    default void onSelect(PropertyDTO dto) {}
 }

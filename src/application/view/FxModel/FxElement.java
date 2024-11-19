@@ -1,12 +1,11 @@
 package view.FxModel;
 
 import common.Color;
+import common.Point;
 
 public interface FxElement {
-	void setX(double x);
-	void setY(double y);
-	void setWidth(double width);
-	void setHeight(double height);
+	void setP(Point p);
+	void setQ(Point q);
 	void setColor(Color color);
 	void setOpacity(double opacity);
 }
