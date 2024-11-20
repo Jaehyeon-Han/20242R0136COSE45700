@@ -35,6 +35,10 @@ public abstract class Element {
 	public Point getQ() {
 		return q;
 	}
+	
+	public void setQ(Point q) {
+		this.q = q;
+	}
 
 	public Color getColor() {
 		return color;
@@ -51,5 +55,12 @@ public abstract class Element {
 				r.getX() <= Math.max(p.getX(), q.getX()) && 
 				Math.min(p.getY(), q.getY()) <= r.getY() && 
 				r.getY() <= Math.max(p.getY(), q.getY());
+	}
+
+	public void translate(double dx, double dy) {
+		p.setX(p.getX() + dx);
+		p.setY(p.getY() + dy);
+		q.setX(q.getX() + dx);
+		q.setY(q.getY() + dy);
 	}
 }

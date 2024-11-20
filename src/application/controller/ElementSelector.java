@@ -8,11 +8,16 @@ import model.Element;
 
 public class ElementSelector {
 	public PropertyDTO select(Point p) {
-		List<Element> elements = ElementManager.getInstance().getAllElements();
+		ElementManager elementManager = ElementManager.getInstance();
+		
+		List<Element> elements = elementManager.getAllElements();
 		for (int i = elements.size() - 1; i >= 0; --i) {
 			Element element = elements.get(i);
 			if (element.isInHere(p)) {
-				return element.toDTO();
+				elementManager.setSelectedElement(element);
+				PropertyDTO dto = element.toDTO();
+				dto.setId(elementManager.getElementId(element));
+				return dto;
 			}
 		}
 		return null;

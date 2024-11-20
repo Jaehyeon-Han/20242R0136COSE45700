@@ -16,6 +16,7 @@ public class ElementManager {
     private List<Element> elements = new ArrayList<>();
     private Map<Element, String> idMap = new HashMap<>();
     private ElementFactory factory = ElementFactory.getInstance();
+    private Element selectedElement;
 
     public PropertyDTO create(PropertyDTO dto) {
         Element newElement = factory.create(
@@ -30,7 +31,14 @@ public class ElementManager {
         String idString = UUID.randomUUID().toString(); 
         idMap.put(newElement, idString);
         elements.add(newElement);
-        return newElement.toDTO();
+        
+        return getDTO(newElement);
+    }
+    
+    public PropertyDTO getDTO(Element element) {
+    	PropertyDTO dto = element.toDTO();
+    	dto.setId(idMap.get(element));
+        return dto;
     }
     
     public String getElementId(Element element) {
@@ -52,5 +60,16 @@ public class ElementManager {
         return ShapeManagerHelper.INSTANCE;
     }
 
+	public void setSelectedElement(Element element) {
+		selectedElement = element;
+	}
+	
+	public Element getSelectedElement() {
+		return selectedElement;
+	}
+
+	public boolean isSelected() {
+		return selectedElement != null;
+	}
 	
 }

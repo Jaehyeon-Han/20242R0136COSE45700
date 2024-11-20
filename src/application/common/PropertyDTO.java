@@ -3,7 +3,7 @@ package common;
 import java.io.File;
 
 public class PropertyDTO {
-    private final String id;
+    private String id;
 	private final String type;
     private final Point p;
     private final Point q;
@@ -24,6 +24,11 @@ public class PropertyDTO {
     public String getId() {
         return id;
     }
+    
+    public void setId(String id) {
+    	this.id = id;
+    }
+    
     public String getType() {
         return type;
     }

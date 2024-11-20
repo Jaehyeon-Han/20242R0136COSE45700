@@ -1,12 +1,13 @@
-package view;
+package view.state;
 
 import java.io.File;
 
+import command.CommandInvoker;
+import command.CreateCommand;
 import common.Color;
 import common.Point;
 import common.PropertyDTO;
-import controller.CommandInvoker;
-import controller.CreateCommand;
+import view.ToolWindow;
 
 public class CreateState implements ToolState {
 	private double startX, startY, endX, endY;
@@ -40,6 +41,11 @@ public class CreateState implements ToolState {
 		CreateCommand createCommand = new CreateCommand(dto);
 		CommandInvoker.getInstance().execute(createCommand);
 	}
+	
+	@Override
+	public void handleMouseDragged(double x, double y) {
+		// Do nothing
+	}
 
 	public void setToolWindow(ToolWindow toolWindow) {
 		this.toolWindow = toolWindow;
@@ -56,5 +62,7 @@ public class CreateState implements ToolState {
 	public static CreateState getInstance() {
 		return CreateStateHelper.INSTANCE;
 	}
+
+	
 
 }

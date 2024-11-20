@@ -1,23 +1,23 @@
-package controller;
+package command;
 
 import common.Point;
+import controller.Controller;
 
-public class SingleSelectCommand implements Command {
+public class ResizeCommand implements Command {
 	private Controller controller;
-	private Point p;
+	private Point newQ;
 	
-	public SingleSelectCommand(Point p) {
-		this.p = p;
+	public ResizeCommand(Point newQ) {
+		this.newQ = newQ;
 	}
 	
 	@Override
 	public void execute() {
-		controller.select(p);
+		controller.resize(newQ);
 	}
 
 	@Override
 	public void setController(Controller controller) {
 		this.controller = controller;
 	}
-	
 }

@@ -1,4 +1,4 @@
-package view.FxModel;
+package view.fxmodel;
 
 import java.io.File;
 

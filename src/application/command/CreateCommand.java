@@ -1,6 +1,7 @@
-package controller;
+package command;
 
 import common.PropertyDTO;
+import controller.Controller;
 
 public class CreateCommand implements Command {
 	private Controller controller;

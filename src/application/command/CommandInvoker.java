@@ -1,6 +1,8 @@
-package controller;
+package command;
 
 import java.util.Stack;
+
+import controller.Controller;
 
 public class CommandInvoker {
 	private Controller controller;

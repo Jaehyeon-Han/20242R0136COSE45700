@@ -2,28 +2,36 @@ package view;
 
 import common.Observer;
 import common.PropertyDTO;
+import controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.state.CreateState;
+import view.state.SelectState;
 
 public class MainView extends Application implements Observer {
+	private static Controller controller; // To add this as an observer
+	
 	private DrawingPane drawingPane;
 	private PropertyWindow propertyWindow;
 	private ToolWindow toolWindow;
 	private GridPane emptyPropertyWindow;
 	private VBox windowsContainer;
+	private boolean selected = false;
 	
 	@Override
 	public void start(Stage primaryStage) {
 		drawingPane = new DrawingPane();
-		FxElementManager.getInstance().setDrawingPane(drawingPane);
 		toolWindow = new ToolWindow(drawingPane, primaryStage, 300, 150);
-		CreateState.getInstance().setToolWindow(toolWindow);
 		propertyWindow = new PropertyWindow(300, 350);
 		emptyPropertyWindow = createEmptyWindow(300, 350);
+		
+		FxElementManager.getInstance().setDrawingPane(drawingPane);
+		CreateState.getInstance().setToolWindow(toolWindow);
+		SelectState.getInstance().setDrawingPane(drawingPane);
 		
 		windowsContainer = createVBox(300, 500);
 		windowsContainer.getChildren().addAll(emptyPropertyWindow, toolWindow);
@@ -38,20 +46,26 @@ public class MainView extends Application implements Observer {
 		primaryStage.setTitle("Graphics Editor");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		
+		controller.addObserver(this);
 	}
 
 	@Override
 	public void onSelect(PropertyDTO dto) {
-		if(dto != null) {
+		if(!selected) {
 			windowsContainer.getChildren().remove(emptyPropertyWindow);
 			windowsContainer.getChildren().add(0, propertyWindow);
 		}
-		else {
-			windowsContainer.getChildren().remove(propertyWindow);
-			windowsContainer.getChildren().add(0, emptyPropertyWindow);
-		}
-		
+		selected = true;
 	}
+	
+	@Override
+	public void onUnselect() {
+		windowsContainer.getChildren().remove(propertyWindow);
+		windowsContainer.getChildren().add(0, emptyPropertyWindow);
+		selected = false;
+	}
+	
 
 	private VBox createVBox(int width, int height) {
 		VBox vBox = new VBox();
@@ -66,5 +80,8 @@ public class MainView extends Application implements Observer {
 		return emptyWindow;
 	}
 
-
+	public static void myLaunch(Controller controller, String[] args) {
+		MainView.controller = controller;
+		MainView.launch(args);
+	}
 }
