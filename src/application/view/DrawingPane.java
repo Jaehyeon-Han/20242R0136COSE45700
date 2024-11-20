@@ -1,8 +1,6 @@
 package view;
 
-import common.Observer;
 import common.Point;
-import common.PropertyDTO;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;

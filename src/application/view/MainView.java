@@ -13,7 +13,7 @@ import view.state.CreateState;
 import view.state.SelectState;
 
 public class MainView extends Application implements Observer {
-	private static Controller controller; // To add this as an observer
+	private static Controller controller; // To add observers, no direct references
 	
 	private DrawingPane drawingPane;
 	private PropertyWindow propertyWindow;
@@ -27,6 +27,7 @@ public class MainView extends Application implements Observer {
 		drawingPane = new DrawingPane();
 		toolWindow = new ToolWindow(drawingPane, primaryStage, 300, 150);
 		propertyWindow = new PropertyWindow(300, 350);
+		controller.addObserver(propertyWindow);
 		emptyPropertyWindow = createEmptyWindow(300, 350);
 		
 		FxElementManager.getInstance().setDrawingPane(drawingPane);
@@ -57,14 +58,16 @@ public class MainView extends Application implements Observer {
 			windowsContainer.getChildren().add(0, propertyWindow);
 		}
 		selected = true;
-	}
+	} // OnSelect를 관찰하기 보다는 ToolState가 SelectState로 바뀔 때 설정하는 게 맞다.
 	
 	@Override
 	public void onUnselect() {
-		windowsContainer.getChildren().remove(propertyWindow);
-		windowsContainer.getChildren().add(0, emptyPropertyWindow);
-		selected = false;
-	}
+		if(selected) {
+			windowsContainer.getChildren().remove(propertyWindow);
+			windowsContainer.getChildren().add(0, emptyPropertyWindow);
+			selected = false;
+		}
+	} // OnSelect를 관찰하기 보다는 ToolState가 SelectState로 바뀔 때 설정하는 게 맞다.
 	
 
 	private VBox createVBox(int width, int height) {
