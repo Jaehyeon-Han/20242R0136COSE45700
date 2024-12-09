@@ -1,5 +1,7 @@
 package model;
 
+import java.util.UUID;
+
 import common.Color;
 import common.Point;
 import common.PropertyDTO;
@@ -7,7 +9,8 @@ import common.PropertyDTO;
 public class Line extends Element {
 	private static final double dThreshold = 20;
 	
-	public Line(Point p, Point q, Color color) {
+	public Line(String id, Point p, Point q, Color color) {
+		this.id = id;
 		this.p = p;
 		this.q = q;
 		this.setColor(color);
@@ -40,8 +43,9 @@ public class Line extends Element {
 	@Override
 	public PropertyDTO toDTO() {
 		PropertyDTO.Builder builder = new PropertyDTO.Builder("line", p, q);
-		PropertyDTO dto = builder.setColor(color)
-		.build();
+		PropertyDTO dto = builder.setId(this.id)
+			.setColor(color)
+			.build();
 		return dto;
 	}
 }

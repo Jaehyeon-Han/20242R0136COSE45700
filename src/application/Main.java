@@ -1,8 +1,8 @@
 import command.CommandInvoker;
 import controller.Controller;
 import controller.ElementManager;
-import view.FxElementManager;
 import view.MainView;
+import view.fxmodel.FxElementManager;
 import view.state.SelectState;
 
 public class Main {

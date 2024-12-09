@@ -1,14 +1,18 @@
 package model;
 
 import common.Color;
+import common.ModelChangeObserver;
 import common.Point;
 import common.PropertyDTO;
 
 public abstract class Element {
 	protected Point p, q;
 	protected Color color; // Image는 색이 없으나 공통 상위 클래스 편의성을 위해
+	protected String id;
+	protected ModelChangeObserver matchingNode;
 	
-	public Element(Point p, Point q) {
+	public Element(String id, Point p, Point q) {
+		this.id = id;
 		this.p = p;
 		this.q = q;
 		setTopLeftAndBottomRight();
@@ -48,6 +52,10 @@ public abstract class Element {
 		this.color = color;
 	}
 	
+	public String getId() {
+		return this.id;
+	}
+	
 	public abstract PropertyDTO toDTO();
 	
 	public boolean isInHere(Point r) {
@@ -62,5 +70,13 @@ public abstract class Element {
 		p.setY(p.getY() + dy);
 		q.setX(q.getX() + dx);
 		q.setY(q.getY() + dy);
+	}
+	
+	public void setMatchingNode(ModelChangeObserver matchingNode) {
+		this.matchingNode = matchingNode;
+	}
+	
+	public void updateMatchingNode() {
+		matchingNode.onChange(this.toDTO());
 	}
 }

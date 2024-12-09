@@ -1,4 +1,4 @@
-package view;
+package view.fxmodel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +8,8 @@ import java.util.Map;
 import common.Observer;
 import common.PropertyDTO;
 import javafx.scene.shape.Circle;
-import view.fxmodel.FxElement;
-import view.fxmodel.FxElementFactory;
+import model.Element;
+import view.DrawingPane;
 
 public class FxElementManager implements Observer {
 	private DrawingPane drawingPane;
@@ -18,14 +18,14 @@ public class FxElementManager implements Observer {
 	private FxElement selectedFxElement;
 
 	@Override
-	public void onCreate(PropertyDTO dto) {
+	public void onCreate(Element newElement) {
 		FxElementFactory fxFactory = FxElementFactory.getInstance();
+		PropertyDTO dto = newElement.toDTO();
 		FxElement newFxElement = fxFactory.create(dto.getType(), dto.getP(), dto.getQ(), dto.getColor(),
 				dto.getImageFile(), dto.getText());
-		String id = dto.getId();
-		idMap.put(id, newFxElement);
+		newElement.setMatchingNode(newFxElement);
+		idMap.put(dto.getId(), newFxElement);
 		fxElements.add(newFxElement);
-
 		drawingPane.add(newFxElement);
 	}
 

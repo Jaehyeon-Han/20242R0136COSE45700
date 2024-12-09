@@ -2,6 +2,7 @@ package view.fxmodel;
 
 import common.Color;
 import common.Point;
+import common.PropertyDTO;
 
 public class FxEllipse extends javafx.scene.shape.Ellipse implements FxElement {
 	private Point topLeft, bottomRight;
@@ -11,6 +12,7 @@ public class FxEllipse extends javafx.scene.shape.Ellipse implements FxElement {
 				(q.getX() - p.getX()) / 2, (q.getY() - p.getY()) / 2);
 		this.topLeft = p;
 		this.bottomRight = q;
+		this.setColor(color);
 	}
 	
 	@Override
@@ -61,7 +63,10 @@ public class FxEllipse extends javafx.scene.shape.Ellipse implements FxElement {
 		setFill(color.toFxColor());
 	}
 
-
-
-	
+	@Override
+	public void onChange(PropertyDTO dto) {
+		setP(dto.getP());
+		setQ(dto.getQ());
+		setColor(dto.getColor());
+	}
 }

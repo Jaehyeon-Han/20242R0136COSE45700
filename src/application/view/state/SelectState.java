@@ -11,16 +11,22 @@ public class SelectState implements ToolState, Observer {
 	private double startX, startY;
 	private DrawingPane drawingPane;
 	private static final int CLICK_THRESHOLD = 100;
-
+	private boolean isSelectCommandExecuted = false;
+			
 	@Override
 	public void handleMousePressed(double x, double y) {
 		startX = x;
 		startY = y;
 		CommandInvoker.getInstance().execute(new SingleSelectCommand(new Point(startX, startY)));
+		isSelectCommandExecuted = true;
 	}
 
 	@Override
 	public void handleMouseDragged(double x, double y) {
+		if (!isSelectCommandExecuted) {
+	        return;
+	    }
+		
 		double deltaX = Math.abs(x - startX);
 		double deltaY = Math.abs(y - startY);
 

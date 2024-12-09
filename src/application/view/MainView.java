@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.fxmodel.FxElementManager;
 import view.state.CreateState;
 import view.state.SelectState;
 
@@ -61,10 +62,12 @@ public class MainView extends Application implements Observer {
 	
 	@Override
 	public void onUnselect() {
-		windowsContainer.getChildren().remove(propertyWindow);
-		windowsContainer.getChildren().add(0, emptyPropertyWindow);
-		selected = false;
-	}
+		if(selected) {
+			windowsContainer.getChildren().remove(propertyWindow);
+			windowsContainer.getChildren().add(0, emptyPropertyWindow);
+			selected = false;
+		}
+	} // OnSelect를 관찰하기 보다는 ToolState가 SelectState로 바뀔 때 설정하는 게 맞다.
 	
 
 	private VBox createVBox(int width, int height) {

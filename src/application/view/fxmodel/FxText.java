@@ -2,6 +2,7 @@ package view.fxmodel;
 
 import common.Color;
 import common.Point;
+import common.PropertyDTO;
 
 public class FxText extends javafx.scene.text.Text implements FxElement {
 	private Point topLeft, bottomRight;
@@ -34,7 +35,7 @@ public class FxText extends javafx.scene.text.Text implements FxElement {
 	public Point getQ() {
 		return this.bottomRight;
 	}
-	
+
 	private void update() {
 		setWidth(bottomRight.getX() - topLeft.getX());
 		setHeight(bottomRight.getY() - topLeft.getY());
@@ -54,5 +55,11 @@ public class FxText extends javafx.scene.text.Text implements FxElement {
 	public void setColor(Color color) {
 		setFill(color.toFxColor());
 	}
-	
+
+	@Override
+	public void onChange(PropertyDTO dto) {
+		setP(dto.getP());
+		setQ(dto.getQ());
+		setColor(dto.getColor());
+	}	
 }

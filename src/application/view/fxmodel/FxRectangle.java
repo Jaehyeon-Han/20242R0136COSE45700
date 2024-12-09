@@ -2,6 +2,7 @@ package view.fxmodel;
 
 import common.Color;
 import common.Point;
+import common.PropertyDTO;
 
 public class FxRectangle extends javafx.scene.shape.Rectangle implements FxElement {
 	private Point topLeft, bottomRight;
@@ -43,5 +44,13 @@ public class FxRectangle extends javafx.scene.shape.Rectangle implements FxEleme
 	@Override
 	public void setColor(Color color) {
 		setFill(color.toFxColor());
+	}
+	
+
+	@Override
+	public void onChange(PropertyDTO dto) {
+		setP(dto.getP());
+		setQ(dto.getQ());
+		setColor(dto.getColor());
 	}
 }

@@ -4,6 +4,7 @@ import java.io.File;
 
 import common.Color;
 import common.Point;
+import common.PropertyDTO;
 
 public class FxImage extends javafx.scene.image.ImageView implements FxElement {
 	private Point topLeft, bottomRight;
@@ -56,5 +57,12 @@ public class FxImage extends javafx.scene.image.ImageView implements FxElement {
 	@Override
 	public void setColor(Color color) {
 		// Do nothing
+	}
+
+	@Override
+	public void onChange(PropertyDTO dto) {
+		setP(dto.getP());
+		setQ(dto.getQ());
+		setColor(dto.getColor());
 	}
 }

@@ -18,7 +18,7 @@ public class ElementManager {
     private ElementFactory factory = ElementFactory.getInstance();
     private Element selectedElement;
 
-    public PropertyDTO create(PropertyDTO dto) {
+    public Element create(PropertyDTO dto) {
         Element newElement = factory.create(
     		dto.getType(),
             dto.getP(), 
@@ -28,17 +28,10 @@ public class ElementManager {
             dto.getText()
         );
 
-        String idString = UUID.randomUUID().toString(); 
-        idMap.put(newElement, idString);
+        idMap.put(newElement, newElement.getId());
         elements.add(newElement);
         
-        return getDTO(newElement);
-    }
-    
-    public PropertyDTO getDTO(Element element) {
-    	PropertyDTO dto = element.toDTO();
-    	dto.setId(idMap.get(element));
-        return dto;
+        return newElement;
     }
     
     public String getElementId(Element element) {
@@ -48,6 +41,7 @@ public class ElementManager {
     public List<Element> getAllElements() {
     	return elements;
     }
+    
     
     // Singleton
     private ElementManager() {}

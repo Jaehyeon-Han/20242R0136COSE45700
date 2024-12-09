@@ -14,8 +14,8 @@ public class Controller {
 	List<Observer> observers = new ArrayList<>();
 
 	public void createElement(PropertyDTO dto) {
-		PropertyDTO newElementDTO = elementManager.create(dto);
-		notifyOnCreate(newElementDTO);
+		Element newElement = elementManager.create(dto);
+		notifyOnCreate(newElement);
 	}
 	
 	public void select(Point p) {
@@ -32,16 +32,15 @@ public class Controller {
 	}
 	
 	public void translate(double dx, double dy) {
-		// 게속 가져와야 되는데 그냥 ElementManager에서 하게 바꿀까?
 		Element selectedElement = elementManager.getSelectedElement();
 		selectedElement.translate(dx, dy);
-		notifyOnChange(elementManager.getDTO(selectedElement));
+		notifyOnChange(selectedElement.toDTO());
 	}
 	
 	public void resize(Point newQ) {
 		Element selectedElement = elementManager.getSelectedElement();
 		selectedElement.setQ(newQ);
-		notifyOnChange(elementManager.getDTO(selectedElement));
+		notifyOnChange(selectedElement.toDTO());
 	}
 	
 	// Observer
@@ -53,9 +52,9 @@ public class Controller {
         observers.remove(observer);
     }
 
-    public void notifyOnCreate(PropertyDTO dto) {
+    public void notifyOnCreate(Element newElement) {
         for (Observer observer : observers) {
-            observer.onCreate(dto);
+            observer.onCreate(newElement);
         }
     }
 
