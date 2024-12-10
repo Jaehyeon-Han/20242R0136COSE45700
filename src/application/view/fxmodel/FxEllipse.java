@@ -69,5 +69,6 @@ public class FxEllipse extends javafx.scene.shape.Ellipse implements FxElement {
 		setP(element.getP());
 		setQ(element.getQ());
 		setColor(element.getColor());
-	}	
+	}
+
 }

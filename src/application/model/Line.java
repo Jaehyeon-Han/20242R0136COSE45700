@@ -81,4 +81,65 @@ public class Line extends Element {
 	public void setHeight(double height) {
 		// Do nothing
 	}
+	
+	@Override
+	public boolean intersects(Point rectP1, Point rectP2) {
+	    double rectX1 = Math.min(rectP1.getX(), rectP2.getX());
+	    double rectY1 = Math.min(rectP1.getY(), rectP2.getY());
+	    double rectX2 = Math.max(rectP1.getX(), rectP2.getX());
+	    double rectY2 = Math.max(rectP1.getY(), rectP2.getY());
+
+	    // Check if either endpoint of the line is inside the rectangle
+	    if (isInHere(rectP1) || isInHere(rectP2)) {
+	        return true;
+	    }
+
+	    // Define the four edges of the rectangle as lines
+	    Point topLeft = new Point(rectX1, rectY1);
+	    Point topRight = new Point(rectX2, rectY1);
+	    Point bottomLeft = new Point(rectX1, rectY2);
+	    Point bottomRight = new Point(rectX2, rectY2);
+
+	    // Check if the line intersects with any of the rectangle's edges
+	    return lineIntersectsLine(p, q, topLeft, topRight) || // Top edge
+	           lineIntersectsLine(p, q, topRight, bottomRight) || // Right edge
+	           lineIntersectsLine(p, q, bottomRight, bottomLeft) || // Bottom edge
+	           lineIntersectsLine(p, q, bottomLeft, topLeft); // Left edge
+	}
+	
+	private boolean lineIntersectsLine(Point p1, Point q1, Point p2, Point q2) {
+	    // Find the four orientations
+	    int o1 = orientation(p1, q1, p2);
+	    int o2 = orientation(p1, q1, q2);
+	    int o3 = orientation(p2, q2, p1);
+	    int o4 = orientation(p2, q2, q1);
+
+	    // General case: lines intersect if orientations differ
+	    if (o1 != o2 && o3 != o4) {
+	        return true;
+	    }
+
+	    // Special cases: Check if points are collinear and on the segment
+	    if (o1 == 0 && onSegment(p1, p2, q1)) return true;
+	    if (o2 == 0 && onSegment(p1, q2, q1)) return true;
+	    if (o3 == 0 && onSegment(p2, p1, q2)) return true;
+	    if (o4 == 0 && onSegment(p2, q1, q2)) return true;
+
+	    return false; // No intersection
+	}
+
+	// Helper function to calculate the orientation of three points
+	private int orientation(Point a, Point b, Point c) {
+	    double val = (b.getY() - a.getY()) * (c.getX() - b.getX()) -
+	                 (b.getX() - a.getX()) * (c.getY() - b.getY());
+	    if (val == 0) return 0; // Collinear
+	    return (val > 0) ? 1 : 2; // Clockwise or Counterclockwise
+	}
+
+	// Helper function to check if a point is on a line segment
+	private boolean onSegment(Point a, Point b, Point c) {
+	    return b.getX() <= Math.max(a.getX(), c.getX()) && b.getX() >= Math.min(a.getX(), c.getX()) &&
+	           b.getY() <= Math.max(a.getY(), c.getY()) && b.getY() >= Math.min(a.getY(), c.getY());
+	}
+
 }

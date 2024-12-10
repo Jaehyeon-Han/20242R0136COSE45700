@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import common.Point;
@@ -18,6 +19,17 @@ public class ElementSelector {
 				return elementManager.getSelectedElement();
 			}
 		}
+		return null;
+	}
+	
+	public Element select(Point p, Point q) {
+		List<Element> selected = new ArrayList<>();
+		for(Element element : ElementManager.getInstance().getAllElements()) {
+			if(element.intersects(p, q)) {
+				selected.add(element);
+			}
+		}
+		
 		return null;
 	}
 

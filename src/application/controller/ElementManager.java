@@ -15,7 +15,7 @@ import model.ElementFactory;
 public class ElementManager {
     private List<Element> elements = new ArrayList<>();
     private Map<String, Element> idMap = new HashMap<>();
-    private Element selectedElement;
+    private Element selectedElement;	
     
     public void add(Element newElement) {
     	idMap.put(newElement.getId(), newElement);
@@ -24,7 +24,7 @@ public class ElementManager {
 
 	public void remove(Element element) {
 		idMap.remove(element.getId());
-		elements.remove(element);
+		element.removeSelfFrom(elements);
 	}
 
 	public Element getElement(String id) {

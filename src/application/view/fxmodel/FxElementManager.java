@@ -64,7 +64,7 @@ public class FxElementManager implements Observer {
 		return selectedId;
 	}
 	
-	public void onRemove(Element element) {
+	public void remove(Element element) {
 		FxElement toRemove = idMap.get(element.getId());
 		idMap.remove(element.getId());
 		fxElements.remove(toRemove);
