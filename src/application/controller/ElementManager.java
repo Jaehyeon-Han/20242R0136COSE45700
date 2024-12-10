@@ -14,33 +14,28 @@ import model.ElementFactory;
 
 public class ElementManager {
     private List<Element> elements = new ArrayList<>();
-    private Map<Element, String> idMap = new HashMap<>();
-    private ElementFactory factory = ElementFactory.getInstance();
+    private Map<String, Element> idMap = new HashMap<>();
     private Element selectedElement;
-
-    public Element create(PropertyDTO dto) {
-        Element newElement = factory.create(
-    		dto.getType(),
-            dto.getP(), 
-            dto.getQ(), 
-            dto.getColor(), 
-            dto.getImageFile(), 
-            dto.getText()
-        );
-
-        idMap.put(newElement, newElement.getId());
+    
+    public void add(Element newElement) {
+    	idMap.put(newElement.getId(), newElement);
         elements.add(newElement);
-        
-        return newElement;
-    }
-    
-    public String getElementId(Element element) {
-    	return idMap.get(element);
-    }
-    
+	}
+
+	public void remove(Element element) {
+		idMap.remove(element.getId());
+		elements.remove(element);
+	}
+
+	public Element getElement(String id) {
+		return idMap.get(id);
+	}
+	
     public List<Element> getAllElements() {
     	return elements;
     }
+    
+    
     
     
     // Singleton
@@ -65,5 +60,6 @@ public class ElementManager {
 	public boolean isSelected() {
 		return selectedElement != null;
 	}
+
 	
 }

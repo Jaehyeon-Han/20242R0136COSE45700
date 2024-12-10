@@ -7,6 +7,7 @@ public class MultiSelectState implements ToolState {
 	private double startX, startY, endX, endY;
 	
 	public MultiSelectState(DrawingPane drawingPane, double startX, double startY) {
+		System.out.println("MultiSelect State");
 		this.startX = startX;
 		this.startY = startY;
 		this.drawingPane = drawingPane;

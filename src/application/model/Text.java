@@ -5,7 +5,7 @@ import common.Point;
 import common.PropertyDTO;
 import java.util.UUID;
 
-public class Text extends Element {
+public class Text extends BoxedElement {
 	private String content; // currently immutable
 	
 	public Text(String id, Point p, Point q, Color color, String content) {
@@ -20,8 +20,8 @@ public class Text extends Element {
 
 	@Override
 	public PropertyDTO toDTO() {
-		PropertyDTO.Builder builder = new PropertyDTO.Builder("text", p, q);
-		PropertyDTO dto = builder.setId(this.id)
+		PropertyDTO.Builder builder = new PropertyDTO.Builder(id, "text", p, q);
+		PropertyDTO dto = builder
 			.setColor(color)
 			.setText(content)
 			.build();

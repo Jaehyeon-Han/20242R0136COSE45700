@@ -3,12 +3,9 @@ package common;
 import java.io.File;
 
 public class PropertyDTO {
-    private String id;
-	private final String type;
-    private final Point p;
-    private final Point q;
+    private final String id, type, text;
+    private final Point p, q;
     private final Color color;
-    private final String text;
     private final File imageFile;
 
     private PropertyDTO(Builder builder) {
@@ -23,10 +20,6 @@ public class PropertyDTO {
 
     public String getId() {
         return id;
-    }
-    
-    public void setId(String id) {
-    	this.id = id;
     }
     
     public String getType() {
@@ -57,24 +50,23 @@ public class PropertyDTO {
 
     // Static Builder Class
     public static class Builder {
-    	private String id;
-    	private final String type;
-        private final Point p;
-        private final Point q;
+    	private final String id, type;
+    	private String text;
+        private final Point p, q;
         private Color color;
-        private String text;
         private File imageFile;
 
-        public Builder(String type, Point p, Point q) {
-            this.type = type;
+        public Builder(String id, String type, Point p, Point q) {
+            this.id = id;
+        	this.type = type;
             this.p = p;
             this.q = q;
         }
 
-        public Builder setId(String id) {
-            this.id = id;
-            return this;
-        }
+//        public Builder setId(String id) {
+//            this.id = id;
+//            return this;
+//        }
         
         public Builder setColor(Color color) {
             this.color = color;

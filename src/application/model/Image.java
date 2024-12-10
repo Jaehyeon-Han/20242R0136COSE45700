@@ -2,14 +2,13 @@ package model;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
 import common.Point;
 import common.PropertyDTO;
 
-public class Image extends Element {
+public class Image extends BoxedElement {
     private File imageFile;
 	private BufferedImage image;
 
@@ -38,8 +37,8 @@ public class Image extends Element {
 
 	@Override
 	public PropertyDTO toDTO() {
-		PropertyDTO.Builder builder = new PropertyDTO.Builder("image", p, q);
-		PropertyDTO dto = builder.setId(this.id)
+		PropertyDTO.Builder builder = new PropertyDTO.Builder(id, "image", p, q);
+		PropertyDTO dto = builder
 			.setImageFile(imageFile)
 			.build();
 		return dto;

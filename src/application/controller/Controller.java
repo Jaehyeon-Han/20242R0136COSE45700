@@ -13,17 +13,22 @@ public class Controller {
 	ElementSelector elementSelector = ElementSelector.getInstance();
 	List<Observer> observers = new ArrayList<>();
 
-	public void createElement(PropertyDTO dto) {
-		Element newElement = elementManager.create(dto);
+	public void addElement(Element newElement) {
+		elementManager.add(newElement);
 		notifyOnCreate(newElement);
 	}
 	
+	public void removeElement(Element element) {
+		elementManager.remove(element);
+		notifyOnRemove(element);
+	}
+
 	public void select(Point p) {
-		PropertyDTO newElementDTO = elementSelector.select(p);
-		if(newElementDTO == null) {
+		Element selectedElement = elementSelector.select(p);
+		if(selectedElement == null) {
 			notifyOnUnselect();
 		} else {
-			notifyOnSelect(newElementDTO);
+			notifyOnSelect(selectedElement);
 		}
 	}
 
@@ -31,16 +36,16 @@ public class Controller {
 		
 	}
 	
-	public void translate(double dx, double dy) {
-		Element selectedElement = elementManager.getSelectedElement();
+	public void translate(String id, double dx, double dy) {
+		Element selectedElement = elementManager.getElement(id);
 		selectedElement.translate(dx, dy);
-		notifyOnChange(selectedElement.toDTO());
+		notifyOnChange(selectedElement);
 	}
 	
-	public void resize(Point newQ) {
-		Element selectedElement = elementManager.getSelectedElement();
+	public void resize(String id, Point newQ) {
+		Element selectedElement = elementManager.getElement(id);
 		selectedElement.setQ(newQ);
-		notifyOnChange(selectedElement.toDTO());
+		notifyOnChange(selectedElement);
 	}
 	
 	// Observer
@@ -58,21 +63,27 @@ public class Controller {
         }
     }
 
-    public void notifyOnChange(PropertyDTO dto) {
+    public void notifyOnChange(Element element) {
         for (Observer observer : observers) {
-            observer.onChange(dto);
+            observer.onChange(element);
         }
     }
     
-	private void notifyOnSelect(PropertyDTO dto) {
+	private void notifyOnSelect(Element selectedElement) {
 		for (Observer observer : observers) {
-            observer.onSelect(dto);
+            observer.onSelect(selectedElement);
         }
 	}
 	
 	private void notifyOnUnselect() {
 		for (Observer observer : observers) {
             observer.onUnselect();
+        }
+	}
+	
+	private void notifyOnRemove(Element element) {
+		for (Observer observer : observers) {
+            observer.onRemove(element);
         }
 	}
 }

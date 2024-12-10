@@ -5,12 +5,13 @@ import command.SingleSelectCommand;
 import common.Observer;
 import common.Point;
 import common.PropertyDTO;
+import model.Element;
 import view.DrawingPane;
 
 public class SelectState implements ToolState, Observer {
 	private double startX, startY;
 	private DrawingPane drawingPane;
-	private static final int CLICK_THRESHOLD = 100;
+	private static final int CLICK_THRESHOLD = 5;
 	private boolean isSelectCommandExecuted = false;
 	
 //	public SelectState(DrawingPane drawingPane) {
@@ -44,7 +45,7 @@ public class SelectState implements ToolState, Observer {
 	}
 
 	@Override
-	public void onSelect(PropertyDTO dto) {
+	public void onSelect(Element element) {
 		drawingPane.setCurrentState(new TranslateState(startX, startY, drawingPane));
 	}
 	

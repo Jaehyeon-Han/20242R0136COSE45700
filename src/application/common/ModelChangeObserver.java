@@ -1,5 +1,7 @@
 package common;
 
+import model.Element;
+
 public interface ModelChangeObserver {
-	void onChange(PropertyDTO dto);
+	void onChange(Element element);
 }

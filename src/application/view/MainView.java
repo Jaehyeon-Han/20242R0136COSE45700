@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.Element;
 import view.fxmodel.FxElementManager;
 import view.state.CreateState;
 import view.state.SelectState;
@@ -53,12 +54,19 @@ public class MainView extends Application implements Observer {
 	}
 
 	@Override
-	public void onSelect(PropertyDTO dto) {
+	public void onSelect(Element element) {
 		if(!selected) {
 			windowsContainer.getChildren().remove(emptyPropertyWindow);
 			windowsContainer.getChildren().add(0, propertyWindow);
 		}
 		selected = true;
+		
+		propertyWindow.onSelect(element);
+	}
+	
+	@Override 
+	public void onChange(Element element) {
+		propertyWindow.onSelect(element);
 	}
 	
 	@Override

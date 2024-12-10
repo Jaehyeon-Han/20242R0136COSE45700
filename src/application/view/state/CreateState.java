@@ -15,6 +15,7 @@ public class CreateState implements ToolState {
 	private DrawingPane drawingPane;
 
 	public CreateState(DrawingPane drawingPane) {
+		System.out.println("Create State");
 		this.drawingPane = drawingPane;
 	}
 	
@@ -38,7 +39,7 @@ public class CreateState implements ToolState {
 		Color color = toolWindow.getColor();
 		File selectedImageFile = toolWindow.getImageFile();
 		
-		PropertyDTO.Builder builder = new PropertyDTO.Builder(type, p, q);
+		PropertyDTO.Builder builder = new PropertyDTO.Builder(null, type, p, q);
 		PropertyDTO dto = builder.setColor(color)
 		.setImageFile(selectedImageFile)
 		//.setText(text);

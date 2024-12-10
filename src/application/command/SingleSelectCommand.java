@@ -2,6 +2,8 @@ package command;
 
 import common.Point;
 import controller.Controller;
+import controller.ElementSelector;
+import model.Element;
 
 public class SingleSelectCommand implements Command {
 	private Controller controller;
@@ -20,5 +22,14 @@ public class SingleSelectCommand implements Command {
 	public void setController(Controller controller) {
 		this.controller = controller;
 	}
+
+	@Override
+	public void undo() {
+		// Not undo-able.
+	}
 	
+	@Override
+	public boolean isUndoable() {
+        return false;
+    }
 }

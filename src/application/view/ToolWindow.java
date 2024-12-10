@@ -2,6 +2,7 @@ package view;
 
 import java.io.File;
 
+import command.CommandInvoker;
 import common.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -25,6 +26,8 @@ public class ToolWindow extends GridPane {
 		
 		Button selectButton = createSelectButton();
 		Button createButton = createCreateButton();
+		Button undoButton = createUndobutton();
+		Button redoButton = createRedoButton();
 		shapeComboBox = createTypeComboBox(primaryStage);
 		colorPicker = createColorPicker();
 
@@ -32,11 +35,13 @@ public class ToolWindow extends GridPane {
 		this.add(createButton, 0, 0);
 		this.add(shapeComboBox, 0, 1);
 		this.add(colorPicker, 1, 1);
+		this.add(undoButton, 0, 2);
+		this.add(redoButton, 1, 2);
 
 		this.setStyle("-fx-border-color: #000000; -fx-border-width: 1px;");
 		this.setPrefSize(width, height);
 	}
-	
+
 	public String getType() {
 		return shapeComboBox.getValue();
 	}
@@ -88,8 +93,27 @@ public class ToolWindow extends GridPane {
 		Button selectButton = new Button("Select");
 		selectButton.setPrefSize(100, 40);
 		selectButton.setOnAction(actionEvent -> {
+			System.out.println("Select State");
 			drawingPane.setCurrentState(SelectState.getInstance());
 		});
 		return selectButton;
+	}
+	
+	private Button createRedoButton() {
+		Button redoButton = new Button("Redo");
+		redoButton.setPrefSize(100, 40);
+		redoButton.setOnAction(actionEvent -> {
+			CommandInvoker.getInstance().redo();
+		});
+		return redoButton;
+	}
+
+	private Button createUndobutton() {
+		Button undoButton = new Button("Undo");
+		undoButton.setPrefSize(100, 40);
+		undoButton.setOnAction(actionEvent -> {
+			CommandInvoker.getInstance().undo();
+		});
+		return undoButton;
 	}
 }

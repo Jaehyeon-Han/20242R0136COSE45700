@@ -7,7 +7,8 @@ import common.PropertyDTO;
 
 public abstract class Element {
 	protected Point p, q;
-	protected Color color; // Image는 색이 없으나 공통 상위 클래스 편의성을 위해
+
+	protected Color color = new Color(0, 0, 0); // Image는 색이 없으나 공통 상위 클래스 편의성을 위해
 	protected String id;
 	protected ModelChangeObserver matchingNode;
 	
@@ -15,21 +16,6 @@ public abstract class Element {
 		this.id = id;
 		this.p = p;
 		this.q = q;
-		setTopLeftAndBottomRight();
-	}
-	
-	public Element() {
-		// For Line: Do nothing
-	}
-	
-	private void setTopLeftAndBottomRight() {
-		double smallX = Math.min(p.getX(), q.getX()), 
-				largeX = Math.max(p.getX(), q.getX());
-		double smallY = Math.min(p.getY(), q.getY()), 
-				largeY = Math.max(p.getY(), q.getY());
-		
-		p = new Point(smallX, smallY);
-		q = new Point(largeX, largeY);
 	}
 	
 	public Point getP() {
@@ -42,6 +28,7 @@ public abstract class Element {
 	
 	public void setQ(Point q) {
 		this.q = q;
+		updateMatchingNode();
 	}
 
 	public Color getColor() {
@@ -50,6 +37,7 @@ public abstract class Element {
 
 	public void setColor(Color color) {
 		this.color = color;
+		updateMatchingNode();
 	}
 	
 	public String getId() {
@@ -70,6 +58,7 @@ public abstract class Element {
 		p.setY(p.getY() + dy);
 		q.setX(q.getX() + dx);
 		q.setY(q.getY() + dy);
+		updateMatchingNode();
 	}
 	
 	public void setMatchingNode(ModelChangeObserver matchingNode) {
@@ -77,6 +66,11 @@ public abstract class Element {
 	}
 	
 	public void updateMatchingNode() {
-		matchingNode.onChange(this.toDTO());
+		matchingNode.onChange(this);
 	}
+	
+	abstract public double getWidth();
+	abstract public void setWidth(double width);
+	abstract public double getHeight();
+	abstract public void setHeight(double height);
 }

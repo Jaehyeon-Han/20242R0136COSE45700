@@ -10,12 +10,14 @@ import common.PropertyDTO;
 import model.Element;
 import view.DrawingPane;
 import view.HandlerManager;
+import javafx.scene.Node;
 
 public class FxElementManager implements Observer {
 	private DrawingPane drawingPane;
 	private List<FxElement> fxElements = new ArrayList<>();
 	private Map<String, FxElement> idMap = new HashMap<>();
 	private FxElement selectedFxElement;
+	private String selectedId;
 
 	@Override
 	public void onCreate(Element newElement) {
@@ -30,15 +32,16 @@ public class FxElementManager implements Observer {
 	}
 
 	@Override
-	public void onSelect(PropertyDTO dto) {
-		FxElement selected = idMap.get(dto.getId());
+	public void onSelect(Element element) {
+		FxElement selected = idMap.get(element.getId());
+		selectedId = element.getId();
 		if (selectedFxElement != null) {
 			selectedFxElement.setOpacity(1);
 		}
 		selected.setOpacity(0.7);
 		System.out.println("Element is selected");
 		HandlerManager.getInstance().detachHandler();
-		HandlerManager.getInstance().attachHandler(dto.getQ());
+		HandlerManager.getInstance().attachHandler(element.getQ());
 		selectedFxElement = selected;
 	}
 
@@ -47,20 +50,24 @@ public class FxElementManager implements Observer {
 		if (selectedFxElement != null) {
 			selectedFxElement.setOpacity(1);
 			HandlerManager.getInstance().detachHandler();
+			selectedId = null;
 		}
 	}
 
 	@Override
-	public void onChange(PropertyDTO dto) {
-		FxElement changedFxElement = idMap.get(dto.getId());
-		updateFxElement(changedFxElement, dto);
-		HandlerManager.getInstance().updateHandler(dto.getQ());
+	public void onChange(Element element) {
+		HandlerManager.getInstance().updateHandler(element.getQ()); // 따로?
 	}
-
-	private void updateFxElement(FxElement changedFxElement, PropertyDTO dto) {
-		changedFxElement.setP(dto.getP());
-		changedFxElement.setQ(dto.getQ());
-		changedFxElement.setColor(dto.getColor());
+	
+	public String getSelectedId() {
+		return selectedId;
+	}
+	
+	public void onRemove(Element element) {
+		FxElement toRemove = idMap.get(element.getId());
+		idMap.remove(element.getId());
+		fxElements.remove(toRemove);
+		drawingPane.remove((Node) toRemove);
 	}
 
 	// Singleton

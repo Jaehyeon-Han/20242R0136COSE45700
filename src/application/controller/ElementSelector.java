@@ -7,7 +7,7 @@ import common.PropertyDTO;
 import model.Element;
 
 public class ElementSelector {
-	public PropertyDTO select(Point p) {
+	public Element select(Point p) {
 		ElementManager elementManager = ElementManager.getInstance();
 		
 		List<Element> elements = elementManager.getAllElements();
@@ -15,9 +15,7 @@ public class ElementSelector {
 			Element element = elements.get(i);
 			if (element.isInHere(p)) {
 				elementManager.setSelectedElement(element);
-				PropertyDTO dto = element.toDTO();
-				dto.setId(elementManager.getElementId(element));
-				return dto;
+				return elementManager.getSelectedElement();
 			}
 		}
 		return null;

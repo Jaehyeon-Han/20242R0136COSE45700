@@ -3,6 +3,7 @@ package view;
 import common.Point;
 import javafx.scene.shape.Circle;
 import view.fxmodel.FxElement;
+import view.fxmodel.FxElementManager;
 import view.state.ResizeState;
 
 public class HandlerManager {
@@ -12,10 +13,11 @@ public class HandlerManager {
     
 	public void attachHandler(Point point) {
 		Circle handler = new Circle(point.getX(), point.getY(), HANDLER_RADIUS);
+		String id = FxElementManager.getInstance().getSelectedId();
 		this.handler = handler;
 		handler.setOnMousePressed(event -> {
-			System.out.println("To Resize State");
-			drawingPane.setCurrentState(new ResizeState(drawingPane));
+			drawingPane.setCurrentState(
+					new ResizeState(drawingPane, id, point.getX(), point.getY()));
 		});
 		drawingPane.add(handler);
 	}
