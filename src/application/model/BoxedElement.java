@@ -28,6 +28,7 @@ abstract public class BoxedElement extends Element {
 		}
 		
 		q.setX(p.getX() + width);
+		updateMatchingNode();
 	}
 
 	public double getHeight() {
@@ -40,5 +41,6 @@ abstract public class BoxedElement extends Element {
 		}
 		
 		q.setY(p.getY() + height);
+		updateMatchingNode();
 	}
 }

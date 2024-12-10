@@ -57,6 +57,7 @@ public class FxElementManager implements Observer {
 	@Override
 	public void onChange(Element element) {
 		HandlerManager.getInstance().updateHandler(element.getQ()); // 따로?
+		
 	}
 	
 	public String getSelectedId() {
@@ -68,6 +69,7 @@ public class FxElementManager implements Observer {
 		idMap.remove(element.getId());
 		fxElements.remove(toRemove);
 		drawingPane.remove((Node) toRemove);
+		HandlerManager.getInstance().detachHandler();
 	}
 
 	// Singleton

@@ -66,7 +66,7 @@ public class MainView extends Application implements Observer {
 	
 	@Override 
 	public void onChange(Element element) {
-		propertyWindow.onSelect(element);
+		propertyWindow.onChange(element);
 	}
 	
 	@Override

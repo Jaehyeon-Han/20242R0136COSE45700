@@ -47,11 +47,7 @@ public class ToolWindow extends GridPane {
 	}
 	
 	public Color getColor() {
-		javafx.scene.paint.Color color = colorPicker.getValue();
-		int r = (int) (color.getRed() * 255);
-		int g = (int) (color.getGreen() * 255);
-		int b = (int) (color.getBlue() * 255);
-		return new Color(r, g, b);
+		return new Color(colorPicker.getValue());
 	}
 	
 	public File getImageFile() {

@@ -31,7 +31,8 @@ public class TranslateState implements ToolState {
 			
 			Command translateCommand = new TranslateCommand(id, endX - startX, endY - startY);
 			CommandInvoker.getInstance().execute(translateCommand);
-			drawingPane.setCurrentState(SelectState.getInstance());
 		}
+		
+		drawingPane.setCurrentState(SelectState.getInstance());
 	}
 }

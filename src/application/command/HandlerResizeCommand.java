@@ -3,12 +3,12 @@ package command;
 import common.Point;
 import controller.Controller;
 
-public class ResizeCommand implements Command {
+public class HandlerResizeCommand implements Command {
 	private Controller controller;
 	private Point oldQ, newQ;
 	private String id;
 	
-	public ResizeCommand(String id, Point oldQ, Point newQ) {
+	public HandlerResizeCommand(String id, Point oldQ, Point newQ) {
 		this.id = id;
 		this.oldQ = oldQ;
 		this.newQ = newQ;

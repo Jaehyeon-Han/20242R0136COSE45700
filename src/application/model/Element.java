@@ -21,12 +21,23 @@ public abstract class Element {
 	public Point getP() {
 		return p;
 	}
+	
+	public void setP(Point p) {
+		if(p.getX() < 0 || p.getY() < 0) {
+			return;
+		}
+		this.p = p;
+		updateMatchingNode();
+	}
 
 	public Point getQ() {
 		return q;
 	}
 	
 	public void setQ(Point q) {
+		if(q.getX() < 0 || q.getY() < 0) {
+			return;
+		}
 		this.q = q;
 		updateMatchingNode();
 	}

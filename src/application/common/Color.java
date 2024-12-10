@@ -9,6 +9,12 @@ public class Color {
 		this.blue = blue;
 	}
 
+	public Color(javafx.scene.paint.Color color) {
+		red = (int) (color.getRed() * 255);
+		green = (int) (color.getGreen() * 255);
+		blue = (int) (color.getBlue() * 255);
+	}
+
 	public int getRed() {
 		return red;
 	}

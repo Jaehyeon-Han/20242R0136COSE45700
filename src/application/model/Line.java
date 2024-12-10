@@ -51,7 +51,25 @@ public class Line extends Element {
 
 	@Override
 	public void setWidth(double width) {
-		// ?????
+		// Calculate the direction vector (normalized)
+	    double dx = q.getX() - p.getX();
+	    double dy = q.getY() - p.getY();
+	    double currentLength = Point.distance(p, q);
+	    
+	    if (currentLength == 0) {
+	        throw new IllegalStateException("Cannot set width for a zero-length line.");
+	    }
+
+	    // Normalize the direction vector
+	    double directionX = dx / currentLength;
+	    double directionY = dy / currentLength;
+
+	    // Update the position of q to achieve the desired width
+	    q = new Point(
+	        p.getX() + directionX * width,
+	        p.getY() + directionY * width
+	    );
+	    updateMatchingNode();
 	}
 
 	@Override
