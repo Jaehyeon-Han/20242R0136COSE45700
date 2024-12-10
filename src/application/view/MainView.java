@@ -31,8 +31,9 @@ public class MainView extends Application implements Observer {
 		emptyPropertyWindow = createEmptyWindow(300, 350);
 		
 		FxElementManager.getInstance().setDrawingPane(drawingPane);
-		CreateState.getInstance().setToolWindow(toolWindow);
+		HandlerManager.getInstance().setDrawingPane(drawingPane);
 		SelectState.getInstance().setDrawingPane(drawingPane);
+		drawingPane.setToolWindow(toolWindow);
 		
 		windowsContainer = createVBox(300, 500);
 		windowsContainer.getChildren().addAll(emptyPropertyWindow, toolWindow);

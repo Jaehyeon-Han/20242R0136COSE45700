@@ -1,6 +1,17 @@
 package view.state;
 
+import view.DrawingPane;
+
 public class MultiSelectState implements ToolState {
+	private DrawingPane drawingPane;
+	private double startX, startY, endX, endY;
+	
+	public MultiSelectState(DrawingPane drawingPane, double startX, double startY) {
+		this.startX = startX;
+		this.startY = startY;
+		this.drawingPane = drawingPane;
+	}
+	
 	@Override
 	public void handleMousePressed(double x, double y) {
 		// TODO Auto-generated method stub
@@ -17,17 +28,5 @@ public class MultiSelectState implements ToolState {
 	public void handleMouseReleased(double x, double y) {
 		// TODO Auto-generated method stub
 
-	}
-
-	// Singleton
-	private MultiSelectState() {
-	}
-
-	private static class MultiSelectStateHelper {
-		private static MultiSelectState INSTANCE = new MultiSelectState();
-	}
-
-	public static MultiSelectState getInstance() {
-		return MultiSelectStateHelper.INSTANCE;
 	}
 }

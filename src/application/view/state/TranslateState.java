@@ -9,6 +9,12 @@ public class TranslateState implements ToolState {
 	private double startX, startY, endX, endY;
 	private DrawingPane drawingPane;
 	
+	public TranslateState(double x, double y, DrawingPane drawingPane) {
+		startX = x;
+		startY = y;
+		this.drawingPane = drawingPane;
+	}
+	
 	@Override
 	public void handleMouseReleased(double x, double y) {
 		endX = x;
@@ -16,12 +22,6 @@ public class TranslateState implements ToolState {
 		
 		Command translateCommand = new TranslateCommand(endX - startX, endY - startY);
 		CommandInvoker.getInstance().execute(translateCommand);
-		drawingPane.setSelectState();
-	}
-
-	public TranslateState(double x, double y, DrawingPane drawingPane) {
-		startX = x;
-		startY = y;
-		this.drawingPane = drawingPane;
+		drawingPane.setCurrentState(SelectState.getInstance());
 	}
 }

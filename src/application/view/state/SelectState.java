@@ -12,6 +12,10 @@ public class SelectState implements ToolState, Observer {
 	private DrawingPane drawingPane;
 	private static final int CLICK_THRESHOLD = 100;
 	private boolean isSelectCommandExecuted = false;
+	
+//	public SelectState(DrawingPane drawingPane) {
+//		this.drawingPane = drawingPane;
+//	}
 			
 	@Override
 	public void handleMousePressed(double x, double y) {
@@ -31,8 +35,7 @@ public class SelectState implements ToolState, Observer {
 		double deltaY = Math.abs(y - startY);
 
 		if (deltaX > CLICK_THRESHOLD || deltaY > CLICK_THRESHOLD) {
-			drawingPane.setMultiSelectState();
-			drawingPane.getCurrentState().handleMouseDragged(startX, startY);
+			drawingPane.setCurrentState(new MultiSelectState(drawingPane, startX, startY));
 		}
 	}
 

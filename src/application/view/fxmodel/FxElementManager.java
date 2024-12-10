@@ -7,9 +7,9 @@ import java.util.Map;
 
 import common.Observer;
 import common.PropertyDTO;
-import javafx.scene.shape.Circle;
 import model.Element;
 import view.DrawingPane;
+import view.HandlerManager;
 
 public class FxElementManager implements Observer {
 	private DrawingPane drawingPane;
@@ -37,8 +37,8 @@ public class FxElementManager implements Observer {
 		}
 		selected.setOpacity(0.7);
 		System.out.println("Element is selected");
-		drawingPane.detachHandler();
-		drawingPane.attachHandler(dto.getQ());
+		HandlerManager.getInstance().detachHandler();
+		HandlerManager.getInstance().attachHandler(dto.getQ());
 		selectedFxElement = selected;
 	}
 
@@ -46,7 +46,7 @@ public class FxElementManager implements Observer {
 	public void onUnselect() {
 		if (selectedFxElement != null) {
 			selectedFxElement.setOpacity(1);
-			drawingPane.detachHandler();
+			HandlerManager.getInstance().detachHandler();
 		}
 	}
 
@@ -54,7 +54,7 @@ public class FxElementManager implements Observer {
 	public void onChange(PropertyDTO dto) {
 		FxElement changedFxElement = idMap.get(dto.getId());
 		updateFxElement(changedFxElement, dto);
-		drawingPane.updateHandler(dto.getQ());
+		HandlerManager.getInstance().updateHandler(dto.getQ());
 	}
 
 	private void updateFxElement(FxElement changedFxElement, PropertyDTO dto) {

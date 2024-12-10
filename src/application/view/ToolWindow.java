@@ -10,6 +10,8 @@ import javafx.scene.layout.GridPane;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import view.state.CreateState;
+import view.state.SelectState;
 
 public class ToolWindow extends GridPane {
 	DrawingPane drawingPane;
@@ -76,7 +78,8 @@ public class ToolWindow extends GridPane {
 		Button createButton = new Button("Create");
 		createButton.setPrefSize(100, 40);
 		createButton.setOnAction(actionEvent -> {
-			drawingPane.setCreateState();
+			drawingPane.setCurrentState(new CreateState(drawingPane));
+			HandlerManager.getInstance().detachHandler();
 		});
 		return createButton;
 	}
@@ -85,7 +88,7 @@ public class ToolWindow extends GridPane {
 		Button selectButton = new Button("Select");
 		selectButton.setPrefSize(100, 40);
 		selectButton.setOnAction(actionEvent -> {
-			drawingPane.setSelectState();
+			drawingPane.setCurrentState(SelectState.getInstance());
 		});
 		return selectButton;
 	}

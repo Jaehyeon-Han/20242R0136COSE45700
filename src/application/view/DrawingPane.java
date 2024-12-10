@@ -14,14 +14,21 @@ import view.state.SelectState;
 import view.state.ToolState;
 
 public class DrawingPane extends Pane {
-	private ToolState currentState = CreateState.getInstance();
-	private Circle handler;
-	private static final double HANDLER_RADIUS = 5;
+	private ToolState currentState = new CreateState(this);
+	private ToolWindow toolWindow;
 	
 	public DrawingPane() {
 		this.setStyle("-fx-border-color: #000000; -fx-border-width: 1px;");
 		this.setPrefSize(700, 500);
 		initializeMouseEventListeners();
+	}
+	
+	public void setToolWindow(ToolWindow toolWindow) {
+		this.toolWindow = toolWindow;
+	}
+	
+	public ToolWindow getToolWindow() {
+		return this.toolWindow;
 	}
 
 	private void initializeMouseEventListeners() {
@@ -40,44 +47,20 @@ public class DrawingPane extends Pane {
 		this.getChildren().add((Node) element);
 	}
 	
-	public void attachHandler(Point point) {
-		Circle handler = new Circle(point.getX(), point.getY(), HANDLER_RADIUS);
-		this.handler = handler;
-		handler.setOnMousePressed(event -> {
-			System.out.println("To Resize State");
-			currentState = new ResizeState(this);
-		});
-		this.getChildren().add(handler);
+	public void add(Node node) {
+		this.getChildren().add(node);
 	}
 	
-	public void detachHandler() {
-		if(handler != null) {
-			this.getChildren().remove(handler);
+	public void remove(Node node) {
+		if(node != null) {
+			this.getChildren().remove(node);
 		}
 	}
 	
-	public void updateHandler(Point newPoint) {
-		handler.setCenterX(newPoint.getX());
-		handler.setCenterY(newPoint.getY());
-	}
-
-	// State Control -> To a separate class?
-	public void setCreateState() {
-		currentState = CreateState.getInstance();
-		detachHandler();
-		System.out.println("To Create state");
-	}
-	public void setSelectState() {
-		currentState = SelectState.getInstance();
-		System.out.println("To Select state");
-	}
-	public void setMultiSelectState() {
-		currentState = MultiSelectState.getInstance();
-		System.out.println("To MultiSelect state");
-	}
 	public ToolState getCurrentState() {
 		return currentState;
 	}
+	
 	public void setCurrentState(ToolState state) {
 		currentState = state;
 	}

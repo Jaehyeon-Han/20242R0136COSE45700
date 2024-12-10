@@ -7,12 +7,17 @@ import command.CreateCommand;
 import common.Color;
 import common.Point;
 import common.PropertyDTO;
+import view.DrawingPane;
 import view.ToolWindow;
 
 public class CreateState implements ToolState {
 	private double startX, startY, endX, endY;
-	private ToolWindow toolWindow;
+	private DrawingPane drawingPane;
 
+	public CreateState(DrawingPane drawingPane) {
+		this.drawingPane = drawingPane;
+	}
+	
 	@Override
 	public void handleMousePressed(double x, double y) {
 		startX = x;
@@ -24,6 +29,7 @@ public class CreateState implements ToolState {
 		endX = x;
 		endY = y;
 
+		ToolWindow toolWindow = drawingPane.getToolWindow();
 		// 책임 분리 필요?
 		String type = toolWindow.getType();
 		Point p = new Point(startX, startY);
@@ -41,28 +47,4 @@ public class CreateState implements ToolState {
 		CreateCommand createCommand = new CreateCommand(dto);
 		CommandInvoker.getInstance().execute(createCommand);
 	}
-	
-	@Override
-	public void handleMouseDragged(double x, double y) {
-		// Do nothing
-	}
-
-	public void setToolWindow(ToolWindow toolWindow) {
-		this.toolWindow = toolWindow;
-	}
-	
-	// Singleton
-	private CreateState() {
-	}
-
-	private static class CreateStateHelper {
-		private static CreateState INSTANCE = new CreateState();
-	}
-
-	public static CreateState getInstance() {
-		return CreateStateHelper.INSTANCE;
-	}
-
-	
-
 }
