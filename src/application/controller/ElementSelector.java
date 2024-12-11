@@ -6,6 +6,8 @@ import java.util.List;
 import common.Point;
 import common.PropertyDTO;
 import model.Element;
+import model.ElementFactory;
+import model.ElementManager;
 
 public class ElementSelector {
 	public Element select(Point p) {
@@ -23,14 +25,24 @@ public class ElementSelector {
 	}
 	
 	public Element select(Point p, Point q) {
+		ElementManager elementManager = ElementManager.getInstance();
+		
+		Element selectedElement;
 		List<Element> selected = new ArrayList<>();
-		for(Element element : ElementManager.getInstance().getAllElements()) {
+		for(Element element : elementManager.getAllElements()) {
 			if(element.intersects(p, q)) {
 				selected.add(element);
 			}
 		}
-		
-		return null;
+		if(selected.size() == 0) {
+			selectedElement = null;
+		} else if(selected.size() == 1) {
+			selectedElement = selected.get(0);
+		} else {
+			selectedElement= ElementFactory.getInstance().createComposite(selected);
+		}
+		elementManager.setSelectedElement(selectedElement);
+		return selectedElement;
 	}
 
 	// Singleton

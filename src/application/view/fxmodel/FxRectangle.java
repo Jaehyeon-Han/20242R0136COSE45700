@@ -3,13 +3,17 @@ package view.fxmodel;
 import common.Color;
 import common.Point;
 import common.PropertyDTO;
+import javafx.scene.Node;
+import javafx.scene.shape.Rectangle;
 import model.Element;
 
-public class FxRectangle extends javafx.scene.shape.Rectangle implements FxElement {
+public class FxRectangle extends FxElement {
+	private Rectangle fxRectangle;
 	private Point topLeft, bottomRight;
 	
-	public FxRectangle(Point p, Point q, Color color) {
-		super(p.getX(), p.getY(), q.getX() - p.getX(), q.getY() - p.getY());
+	public FxRectangle(String id, Point p, Point q, Color color) {
+		super(id);
+		fxRectangle = new Rectangle(p.getX(), p.getY(), q.getX() - p.getX(), q.getY() - p.getY());
 		this.setColor(color);
 		this.topLeft = p;
 		this.bottomRight = q;
@@ -36,15 +40,15 @@ public class FxRectangle extends javafx.scene.shape.Rectangle implements FxEleme
 	}
 	
 	private void update() {
-		setWidth(bottomRight.getX() - topLeft.getX());
-		setHeight(bottomRight.getY() - topLeft.getY());
-		setX(topLeft.getX());
-		setY(topLeft.getY());
+		fxRectangle.setWidth(bottomRight.getX() - topLeft.getX());
+		fxRectangle.setHeight(bottomRight.getY() - topLeft.getY());
+		fxRectangle.setX(topLeft.getX());
+		fxRectangle.setY(topLeft.getY());
 	}
 
 	@Override
 	public void setColor(Color color) {
-		setFill(color.toFxColor());
+		fxRectangle.setFill(color.toFxColor());
 	}
 	
 
@@ -53,5 +57,15 @@ public class FxRectangle extends javafx.scene.shape.Rectangle implements FxEleme
 		setP(element.getP());
 		setQ(element.getQ());
 		setColor(element.getColor());
+	}
+
+	@Override
+	void setOpacity(double opacity) {
+		fxRectangle.setOpacity(opacity);
+	}
+
+	@Override
+	public Node getNode() {
+		return fxRectangle;
 	}	
 }

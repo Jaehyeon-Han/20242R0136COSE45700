@@ -20,8 +20,10 @@ public abstract class Element {
 		this.q = q;
 	}
 	
-	public void removeSelfFrom(List<Element> elements) {
-        elements.remove(this);
+	public void remove() {
+        ElementManager manager = ElementManager.getInstance();
+        manager.elements.remove(this);
+        manager.idMap.remove(id);
         removeMatchingNode();
     }
 	
@@ -88,7 +90,15 @@ public abstract class Element {
 	}
 	
 	public void removeMatchingNode() {
-		matchingNode.onRemove(this);
+		matchingNode.onRemove();
+	}
+	
+	public void selectMatchingNode(boolean select) {
+		if(select) {
+			matchingNode.select();
+		} else {
+			matchingNode.unselect();
+		}
 	}
 	
 	abstract public double getWidth();

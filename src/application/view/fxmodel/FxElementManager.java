@@ -23,7 +23,7 @@ public class FxElementManager implements Observer {
 	public void onCreate(Element newElement) {
 		FxElementFactory fxFactory = FxElementFactory.getInstance();
 		PropertyDTO dto = newElement.toDTO();
-		FxElement newFxElement = fxFactory.create(dto.getType(), dto.getP(), dto.getQ(), dto.getColor(),
+		FxElement newFxElement = fxFactory.create(dto.getId(), dto.getType(), dto.getP(), dto.getQ(), dto.getColor(),
 				dto.getImageFile(), dto.getText());
 		newElement.setMatchingNode(newFxElement);
 		idMap.put(dto.getId(), newFxElement);
@@ -34,17 +34,17 @@ public class FxElementManager implements Observer {
 	@Override
 	public void onSelect(Element element) {
 		FxElement selected = idMap.get(element.getId());
-		selectedId = element.getId();
-		if (selectedFxElement != null) {
-			selectedFxElement.setOpacity(1);
+		if(selected == null) {
+			selected = FxElementFactory.getInstance().createComposite(element);
+			element.setMatchingNode(selected);
 		}
-		selected.setOpacity(0.7);
+		selectedId = selected.getId();
 		System.out.println("Element is selected");
 		HandlerManager.getInstance().detachHandler();
 		HandlerManager.getInstance().attachHandler(element.getQ());
 		selectedFxElement = selected;
 	}
-
+	
 	@Override
 	public void onUnselect() {
 		if (selectedFxElement != null) {
@@ -64,11 +64,10 @@ public class FxElementManager implements Observer {
 		return selectedId;
 	}
 	
-	public void remove(Element element) {
-		FxElement toRemove = idMap.get(element.getId());
+	public void remove(FxElement element) {
 		idMap.remove(element.getId());
-		fxElements.remove(toRemove);
-		drawingPane.remove((Node) toRemove);
+		fxElements.remove(element);
+		drawingPane.remove(element.getNode());
 		HandlerManager.getInstance().detachHandler();
 	}
 

@@ -1,6 +1,6 @@
 import command.CommandInvoker;
 import controller.Controller;
-import controller.ElementManager;
+import model.ElementManager;
 import view.MainView;
 import view.fxmodel.FxElementManager;
 import view.state.SelectState;

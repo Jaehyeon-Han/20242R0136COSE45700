@@ -2,16 +2,14 @@ package command;
 
 import common.Color;
 import controller.Controller;
-import controller.ElementManager;
 import model.Element;
+import model.ElementManager;
 
 public class SetColorCommand implements Command {
 	private Color oldColor, newColor;
-	private String id;
 	Element element;
 	
 	public SetColorCommand(String id, Color oldColor, Color newColor) {
-		this.id = id;
 		this.oldColor = oldColor;
 		this.newColor = newColor;
 		element = ElementManager.getInstance().getElement(id);

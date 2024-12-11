@@ -24,22 +24,11 @@ public class ElementFactory {
 	
 	public Composite createComposite(List<Element> elements) {
 		String id = UUID.randomUUID().toString();
-		return new Composite(id, elements);
-	}
-	
-	private static class CompositeHelper {
-		private static final double maxVal = 99999;
-		
-		private static double x1 = maxVal, y1 = maxVal;
-		
-		private static void update() {
-			for(Element element : children) {
-				x1 = Math.min(x1, element.x1);
-				y1 = Math.min(y1, element.y1);
-				x2 = Math.max(x2, element.x2);
-				y2 = Math.max(y2, element.y2);
+			Composite composite = new Composite(id);
+			for(Element element : elements) {
+				composite.addChild(element);
 			}
-		}
+			return composite;
 	}
 
 	// Singleton

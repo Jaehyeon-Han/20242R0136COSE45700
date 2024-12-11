@@ -6,19 +6,42 @@ import java.util.List;
 
 import common.Color;
 import common.Point;
+import javafx.scene.Node;
 import model.Element;
 
-public interface FxElement extends ModelChangeObserver {
-	void setP(Point p);
-	void setQ(Point q);
-	void setColor(Color color);
-	void setOpacity(double opacity);
+public abstract class FxElement implements ModelChangeObserver {
+	private String id;
 	
-	default void onRemove(Element element) {
-		
+	protected FxElement(String id) {
+		this.id = id;
 	}
 	
-	default void removeSelfFrom(List<FxElement> elements) {
-		elements.remove(this);
+	abstract void setP(Point p);
+	abstract void setQ(Point q);
+	abstract void setColor(Color color);
+	abstract void setOpacity(double opacity);
+	
+	public void onRemove() {
+		this.remove();
 	}
+	
+	private void remove() {
+		FxElementManager.getInstance().remove(this);
+	}
+	
+	@Override
+	public void select() {
+		this.setOpacity(0.7);
+	}
+	
+	@Override
+	public void unselect() {
+		this.setOpacity(1);
+	}
+	
+	public String getId() {
+		return id;
+	}
+	
+	public abstract Node getNode();
 }

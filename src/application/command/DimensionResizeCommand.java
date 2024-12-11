@@ -1,8 +1,8 @@
 package command;
 
 import controller.Controller;
-import controller.ElementManager;
 import model.Element;
+import model.ElementManager;
 
 public class DimensionResizeCommand implements Command {
 	private double oldWidth, oldHeight, newWidth, newHeight;

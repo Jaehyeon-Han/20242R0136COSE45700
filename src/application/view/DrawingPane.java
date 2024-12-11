@@ -44,7 +44,7 @@ public class DrawingPane extends Pane {
 	}
 	
 	public void add(FxElement element) {
-		this.getChildren().add((Node) element);
+		this.getChildren().add(element.getNode());
 	}
 	
 	public void add(Node node) {

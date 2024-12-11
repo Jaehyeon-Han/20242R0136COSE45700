@@ -5,8 +5,8 @@ import java.util.List;
 
 import common.Observer;
 import common.Point;
-import common.PropertyDTO;
 import model.Element;
+import model.ElementManager;
 
 public class Controller {
 	ElementManager elementManager = ElementManager.getInstance();
@@ -24,16 +24,29 @@ public class Controller {
 	}
 
 	public void select(Point p) {
+		ElementManager manager = ElementManager.getInstance();
+		Element currentSelected = manager.selectedElement;
+		if(currentSelected != null && currentSelected.isInHere(p)) {
+			notifyOnSelect(currentSelected);
+			return;
+		}
+		
 		Element selectedElement = elementSelector.select(p);
+		manager.selectedElement = selectedElement;
+		notifySelect(selectedElement);
+	}
+
+	public void select(Point p, Point q) {
+		Element selectedElement = elementSelector.select(p, q);
+		notifySelect(selectedElement);
+	}
+	
+	private void notifySelect(Element selectedElement) {
 		if(selectedElement == null) {
 			notifyOnUnselect();
 		} else {
 			notifyOnSelect(selectedElement);
 		}
-	}
-
-	public void select(Point p, Point q) {
-		
 	}
 	
 	public void translate(String id, double dx, double dy) {

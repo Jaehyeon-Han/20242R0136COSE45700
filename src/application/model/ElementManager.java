@@ -1,4 +1,4 @@
-package controller;
+package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,13 +9,10 @@ import java.util.UUID;
 import common.Point;
 import common.PropertyDTO;
 
-import model.Element;
-import model.ElementFactory;
-
 public class ElementManager {
-    private List<Element> elements = new ArrayList<>();
-    private Map<String, Element> idMap = new HashMap<>();
-    private Element selectedElement;	
+    public List<Element> elements = new ArrayList<>();
+    public Map<String, Element> idMap = new HashMap<>();
+    public Element selectedElement;	
     
     public void add(Element newElement) {
     	idMap.put(newElement.getId(), newElement);
@@ -23,11 +20,13 @@ public class ElementManager {
 	}
 
 	public void remove(Element element) {
-		idMap.remove(element.getId());
-		element.removeSelfFrom(elements);
+		element.remove();
 	}
 
 	public Element getElement(String id) {
+		if(selectedElement != null && selectedElement.getId().equals(id)) {
+			return selectedElement;
+		}
 		return idMap.get(id);
 	}
 	

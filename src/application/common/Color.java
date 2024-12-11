@@ -36,4 +36,14 @@ public class Color {
 	public javafx.scene.paint.Color toFxColor() {
 		return javafx.scene.paint.Color.rgb(red, green, blue);
 	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if(object instanceof Color) {
+			return this.red == ((Color)object).red
+					&& this.green == ((Color)object).green
+					&& this.blue == ((Color)object).blue;
+		}
+		return false;
+	}
 }

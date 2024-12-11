@@ -13,14 +13,14 @@ import model.Rectangle;
 import model.Text;
 
 public class FxElementFactory {
-	public FxElement create(String type, Point p, Point q, 
+	public FxElement create(String id, String type, Point p, Point q, 
 			Color color, File imageFile, String text) {
 		switch(type) {
-		case "line": return new FxLine(p, q, color);
-		case "rectangle": return new FxRectangle(p, q, color);
-		case "ellipse": return new FxEllipse(p, q, color);
-		case "image": return new FxImage(p, q, imageFile);
-		case "text": return new FxText(p, q, color, text);
+		case "line": return new FxLine(id, p, q, color);
+		case "rectangle": return new FxRectangle(id, p, q, color);
+		case "ellipse": return new FxEllipse(id, p, q, color);
+		case "image": return new FxImage(id, p, q, imageFile);
+		case "text": return new FxText(id, p, q, color, text);
 		default: throw new IllegalArgumentException("Trying to create an illegal type");
 		}
 	}
@@ -35,6 +35,10 @@ public class FxElementFactory {
 
 	public static FxElementFactory getInstance() {
 		return FxElementFactoryHelper.INSTANCE;
+	}
+
+	public FxElement createComposite(Element element) {
+		return new FxComposite(element.getId());
 	}
 
 }

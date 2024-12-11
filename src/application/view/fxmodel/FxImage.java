@@ -5,17 +5,22 @@ import java.io.File;
 import common.Color;
 import common.Point;
 import common.PropertyDTO;
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import model.Element;
 
-public class FxImage extends javafx.scene.image.ImageView implements FxElement {
+public class FxImage extends FxElement {
+	private ImageView fxImage;
 	private Point topLeft, bottomRight;
 	
-	public FxImage(Point p, Point q, File imageFile) {
-		setX(p.getX());
-		setY(p.getY());
+	public FxImage(String id, Point p, Point q, File imageFile) {
+		super(id);
+		fxImage = new ImageView(imageFile.toURI().toString());
+		fxImage.setX(p.getX());
+		fxImage.setY(p.getY());
 		setWidth(q.getX() - p.getX());
 		setHeight(q.getY() - p.getY());
-		setImage(new javafx.scene.image.Image(imageFile.toURI().toString()));
 		this.topLeft = p;
 		this.bottomRight = q;
 	}
@@ -35,8 +40,8 @@ public class FxImage extends javafx.scene.image.ImageView implements FxElement {
 	private void update() {
 		setWidth(bottomRight.getX() - topLeft.getX());
 		setHeight(bottomRight.getY() - topLeft.getY());
-		setX(topLeft.getX());
-		setY(topLeft.getY());
+		fxImage.setX(topLeft.getX());
+		fxImage.setY(topLeft.getY());
 	}
 
 	public Point getP() {
@@ -48,11 +53,11 @@ public class FxImage extends javafx.scene.image.ImageView implements FxElement {
 	}
 	
 	private void setWidth(double width) {
-		setFitWidth(width);
+		fxImage.setFitWidth(width);
 	}
 
 	private void setHeight(double height) {
-		setFitHeight(height);
+		fxImage.setFitHeight(height);
 	}
 
 	@Override
@@ -64,5 +69,15 @@ public class FxImage extends javafx.scene.image.ImageView implements FxElement {
 	public void onChange(Element element) {
 		setP(element.getP());
 		setQ(element.getQ());
+	}
+
+	@Override
+	void setOpacity(double opacity) {
+		fxImage.setOpacity(opacity);
+	}
+
+	@Override
+	public Node getNode() {
+		return fxImage;
 	}	
 }
