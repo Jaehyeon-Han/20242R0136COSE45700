@@ -1,39 +1,25 @@
 package command;
 
-import common.PropertyDTO;
-import controller.Controller;
-import model.Element;
-import model.ElementFactory;
+import java.util.UUID;
+
+import common.CreateInfo;
+import model.ElementManager;
 
 public class CreateCommand implements Command {
-	private Controller controller;
-	private PropertyDTO dto;
-	private Element newElement; 
+	private CreateInfo info; 
 	
-	public CreateCommand(PropertyDTO dto) {
-		this.dto = dto;
+	public CreateCommand(CreateInfo info) {
+		this.info = info;
 	}
 	
 	@Override
 	public void execute() {
-        newElement = ElementFactory.getInstance().create(
-    		dto.getType(),
-            dto.getP(), 
-            dto.getQ(), 
-            dto.getColor(), 
-            dto.getImageFile(), 
-            dto.getText()
-        );
-		
-		controller.addElement(newElement);
+		String id = UUID.randomUUID().toString();
+		info.setId(id);
+		ElementManager.getInstance().add(info);
 	}
 	
 	public void undo() {
-		controller.removeElement(newElement);
-	}
-
-	@Override
-	public void setController(Controller controller) {
-		this.controller = controller;
+		ElementManager.getInstance().remove(info.getId());
 	}
 }

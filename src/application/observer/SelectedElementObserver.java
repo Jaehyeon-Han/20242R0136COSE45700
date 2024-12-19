@@ -1,7 +1,7 @@
-package common;
+package observer;
 
 import model.Element;
 
 public interface SelectedElementObserver {
-	void onSelect(Element selectedElement);
+	void onChange(Element selectedElement);
 }

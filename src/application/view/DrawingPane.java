@@ -1,16 +1,9 @@
 package view;
 
-import common.Observer;
-import common.Point;
-import common.PropertyDTO;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import view.fxmodel.FxElement;
 import view.state.CreateState;
-import view.state.MultiSelectState;
-import view.state.ResizeState;
-import view.state.SelectState;
 import view.state.ToolState;
 
 public class DrawingPane extends Pane {
@@ -43,9 +36,9 @@ public class DrawingPane extends Pane {
 		});
 	}
 	
-	public void add(FxElement element) {
-		this.getChildren().add(element.getNode());
-	}
+//	public void add(FxElement element) {
+//		this.getChildren().add(element.getNode());
+//	}
 	
 	public void add(Node node) {
 		this.getChildren().add(node);
@@ -55,10 +48,6 @@ public class DrawingPane extends Pane {
 		if(node != null) {
 			this.getChildren().remove(node);
 		}
-	}
-	
-	public ToolState getCurrentState() {
-		return currentState;
 	}
 	
 	public void setCurrentState(ToolState state) {

@@ -2,7 +2,7 @@ package view.fxmodel;
 
 import common.Color;
 import common.Point;
-import common.PropertyDTO;
+import common.ModelInfo;
 import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
 import model.Element;
@@ -10,16 +10,20 @@ import model.Element;
 public class FxEllipse extends FxElement {
 	private Ellipse fxEllipse;
 	private Point topLeft, bottomRight;
+	private Color color;
 	
 	public FxEllipse(String id, Point p, Point q, Color color) {
 		super(id);
-		fxEllipse = new Ellipse((p.getX() + q.getX()) / 2, (p.getY() + q.getY()) / 2, 
-				(q.getX() - p.getX()) / 2, (q.getY() - p.getY()) / 2);
 		this.topLeft = p;
 		this.bottomRight = q;
+		this.color = color;
+		
+		fxEllipse = new Ellipse((p.getX() + q.getX()) / 2, (p.getY() + q.getY()) / 2, 
+				(q.getX() - p.getX()) / 2, (q.getY() - p.getY()) / 2);
 		this.setColor(color);
 	}
 	
+	// Setters and Getters
 	@Override
 	public void setP(Point p) {
 		this.topLeft = p;
@@ -32,14 +36,7 @@ public class FxEllipse extends FxElement {
 		update();
 	}
 	
-	public Point getP() {
-		return this.topLeft;
-	}
-	
-	public Point getQ() {
-		return this.bottomRight;
-	}
-	
+	// Updating The Real FxObject
 	private void update() {
 		setWidth(bottomRight.getX() - topLeft.getX());
 		setHeight(bottomRight.getY() - topLeft.getY());
@@ -68,6 +65,7 @@ public class FxEllipse extends FxElement {
 		fxEllipse.setFill(color.toFxColor());
 	}
 
+	// Observing Matching Model Instance
 	@Override
 	public void onChange(Element element) {
 		setP(element.getP());
@@ -75,14 +73,25 @@ public class FxEllipse extends FxElement {
 		setColor(element.getColor());
 	}
 
+//	@Override
+//	void setOpacity(double opacity) {
+//		fxEllipse.setOpacity(opacity);
+//	}
+	
 	@Override
-	void setOpacity(double opacity) {
-		fxEllipse.setOpacity(opacity);
+	public void highlight() {
+		fxEllipse.setOpacity(0.7);
+		fxEllipse.setStroke(javafx.scene.paint.Color.BLUE);
+	}
+	
+	@Override
+	public void unHighlight() {
+		fxEllipse.setOpacity(1);
+		fxEllipse.setStroke(javafx.scene.paint.Color.TRANSPARENT);
 	}
 
 	@Override
 	public Node getNode() {
 		return fxEllipse;
 	}
-
 }

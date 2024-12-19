@@ -1,18 +1,19 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import common.Color;
-import common.ModelChangeObserver;
 import common.Point;
-import common.PropertyDTO;
+import common.ModelInfo;
+import observer.ModelChangeObserver;
+import observer.ModelChangeSubject;
 
-public abstract class Element {
-	protected Point p, q;
-
-	protected Color color = new Color(0, 0, 0); // Image는 색이 없으나 공통 상위 클래스 편의성을 위해
+public abstract class Element implements ModelChangeSubject {
 	protected String id;
-	protected ModelChangeObserver matchingNode;
+	protected Point p, q;
+	protected Color color = new Color(0, 0, 0); // Image는 색이 없으나 공통 상위 클래스 편의성을 위해
+	protected List<ModelChangeObserver> observers = new ArrayList<>();
 	
 	public Element(String id, Point p, Point q) {
 		this.id = id;
@@ -20,12 +21,10 @@ public abstract class Element {
 		this.q = q;
 	}
 	
-	public void remove() {
-        ElementManager manager = ElementManager.getInstance();
-        manager.elements.remove(this);
-        manager.idMap.remove(id);
-        removeMatchingNode();
-    }
+	// Getters and Setters
+	public String getId() {
+		return this.id;
+	}
 	
 	public Point getP() {
 		return p;
@@ -36,7 +35,7 @@ public abstract class Element {
 			return;
 		}
 		this.p = p;
-		updateMatchingNode();
+		notifyOnChange();
 	}
 
 	public Point getQ() {
@@ -48,7 +47,7 @@ public abstract class Element {
 			return;
 		}
 		this.q = q;
-		updateMatchingNode();
+		notifyOnChange();
 	}
 
 	public Color getColor() {
@@ -57,48 +56,7 @@ public abstract class Element {
 
 	public void setColor(Color color) {
 		this.color = color;
-		updateMatchingNode();
-	}
-	
-	public String getId() {
-		return this.id;
-	}
-	
-	public abstract PropertyDTO toDTO();
-	
-	public boolean isInHere(Point r) {
-		return Math.min(p.getX(), q.getX()) <= r.getX() && 
-				r.getX() <= Math.max(p.getX(), q.getX()) && 
-				Math.min(p.getY(), q.getY()) <= r.getY() && 
-				r.getY() <= Math.max(p.getY(), q.getY());
-	}
-
-	public void translate(double dx, double dy) {
-		p.setX(p.getX() + dx);
-		p.setY(p.getY() + dy);
-		q.setX(q.getX() + dx);
-		q.setY(q.getY() + dy);
-		updateMatchingNode();
-	}
-	
-	public void setMatchingNode(ModelChangeObserver matchingNode) {
-		this.matchingNode = matchingNode;
-	}
-	
-	public void updateMatchingNode() {
-		matchingNode.onChange(this);
-	}
-	
-	public void removeMatchingNode() {
-		matchingNode.onRemove();
-	}
-	
-	public void selectMatchingNode(boolean select) {
-		if(select) {
-			matchingNode.select();
-		} else {
-			matchingNode.unselect();
-		}
+		notifyOnChange();
 	}
 	
 	abstract public double getWidth();
@@ -106,21 +64,40 @@ public abstract class Element {
 	abstract public double getHeight();
 	abstract public void setHeight(double height);
 	
-	public boolean intersects(Point rectP1, Point rectP2) {
-	    double x1 = Math.min(p.getX(), q.getX());
-	    double y1 = Math.min(p.getY(), q.getY());
-	    double x2 = Math.max(p.getX(), q.getX());
-	    double y2 = Math.max(p.getY(), q.getY());
-
-	    double rectX1 = Math.min(rectP1.getX(), rectP2.getX());
-	    double rectY1 = Math.min(rectP1.getY(), rectP2.getY());
-	    double rectX2 = Math.max(rectP1.getX(), rectP2.getX());
-	    double rectY2 = Math.max(rectP1.getY(), rectP2.getY());
-
-	    return !(rectX1 > x2 || 
-	             rectX2 < x1 || 
-	             rectY1 > y2 || 
-	             rectY2 < y1);
+	// Basic Operations
+	public void translate(double dx, double dy) {
+		p.setX(p.getX() + dx);
+		p.setY(p.getY() + dy);
+		q.setX(q.getX() + dx);
+		q.setY(q.getY() + dy);
+		notifyOnChange();
 	}
-
+	
+	// Hit test
+	public boolean isHit(Point r) {
+		return Math.min(p.getX(), q.getX()) <= r.getX() && 
+				r.getX() <= Math.max(p.getX(), q.getX()) && 
+				Math.min(p.getY(), q.getY()) <= r.getY() && 
+				r.getY() <= Math.max(p.getY(), q.getY());
+	}
+	
+	abstract public boolean intersects(Point rectP1, Point rectP2);
+	
+	// DTO conversion
+	public abstract ModelInfo getModelInfo();
+	
+	// ModelChange Subject
+	public void addObserver(ModelChangeObserver observer) {
+		observers.add(observer);
+	}
+	
+	public void removeObserver(ModelChangeObserver observer) {
+		observers.remove(observer);
+	}
+	
+	public void notifyOnChange() {
+		for(ModelChangeObserver observer: observers) {
+			observer.onChange(this);
+		}
+	}
 }

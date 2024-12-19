@@ -4,38 +4,74 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import common.Point;
-import common.PropertyDTO;
+import common.CreateInfo;
+import controller.SelectedElementManager;
+import observer.ModelListObserver;
+import observer.ModelListSubject;
 
-public class ElementManager {
-    public List<Element> elements = new ArrayList<>();
-    public Map<String, Element> idMap = new HashMap<>();
-    public Element selectedElement;	
+public class ElementManager implements ModelListSubject {
+    private List<Element> elements = new ArrayList<>();
+    private Map<String, Element> idMap = new HashMap<>();
+    private List<ModelListObserver> observers = new ArrayList<>();
     
-    public void add(Element newElement) {
+    public void add(CreateInfo info) {
+    	 Element newElement = ElementFactory.getInstance().create(
+    			 info.getId(),
+    			 info.getType(),
+    			 info.getP(), 
+    			 info.getQ(), 
+    			 info.getColor(), 
+    			 info.getImageFile(), 
+    			 info.getText()
+    	        );
     	idMap.put(newElement.getId(), newElement);
         elements.add(newElement);
+        notifyOnCreate(newElement);
 	}
 
-	public void remove(Element element) {
-		element.remove();
+	public void remove(String id) {
+		Element toRemove = idMap.get(id);
+		elements.remove(toRemove);
+		notifyOnRemove(toRemove);
 	}
 
 	public Element getElement(String id) {
+		Element selectedElement = SelectedElementManager.getInstance().getSelectedElement();
 		if(selectedElement != null && selectedElement.getId().equals(id)) {
 			return selectedElement;
-		}
+		} // Composite element is not in the list
 		return idMap.get(id);
+	}
+	
+	public boolean isInList(Element element) {
+		return elements.contains(element);
 	}
 	
     public List<Element> getAllElements() {
     	return elements;
     }
     
+    // ModelListObserver Subject
+    public void addObserver(ModelListObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(ModelListObserver observer) {
+        observers.remove(observer);
+    }
     
-    
+	public void notifyOnCreate(Element element) {
+		for(ModelListObserver observer: observers) {
+			observer.onCreate(element);
+		}
+	}
+
+	public void notifyOnRemove(Element element) {
+		for(ModelListObserver observer: observers) {
+			observer.onRemove(element);
+		}
+	}
     
     // Singleton
     private ElementManager() {}
@@ -47,18 +83,4 @@ public class ElementManager {
     public static ElementManager getInstance() {
         return ShapeManagerHelper.INSTANCE;
     }
-
-	public void setSelectedElement(Element element) {
-		selectedElement = element;
-	}
-	
-	public Element getSelectedElement() {
-		return selectedElement;
-	}
-
-	public boolean isSelected() {
-		return selectedElement != null;
-	}
-
-	
 }

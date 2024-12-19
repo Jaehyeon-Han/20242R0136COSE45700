@@ -1,11 +1,10 @@
 package view;
 
 import command.CommandInvoker;
-import command.DimensionResizeCommand;
+import command.SetDimensionCommand;
 import command.SetColorCommand;
 import command.TranslateCommand;
 import common.Color;
-import common.Observer;
 import common.Point;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
@@ -14,9 +13,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import model.Element;
+import observer.SelectedStateObserver;
+import observer.SelectedElementObserver;
 import view.fxmodel.FxElementManager;
 
-public class PropertyWindow extends GridPane implements Observer {
+public class PropertyWindow extends GridPane 
+implements SelectedStateObserver, SelectedElementObserver {
 	TextField selectedX, selectedY, selectedWidth, selectedHeight;
 	ColorPicker selectedColor;
 	private double x, y, width, height;
@@ -34,6 +36,7 @@ public class PropertyWindow extends GridPane implements Observer {
 		
 		this.setStyle("-fx-border-color: #00FF00; -fx-border-width: 1px;");
 		this.setPrefSize(width, height);
+		this.setVisible(false);
 	}
 
 	private Node[] createValueDisplays() {
@@ -63,7 +66,6 @@ public class PropertyWindow extends GridPane implements Observer {
 				double dy = newY - y;
 				
 				CommandInvoker.getInstance().execute(new TranslateCommand(id, 0, dy));
-
 			}
 		});
 		selectedY.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -79,7 +81,7 @@ public class PropertyWindow extends GridPane implements Observer {
 				String id = FxElementManager.getInstance().getSelectedId();
 				double newWidth = Double.parseDouble(selectedWidth.getText());
 				CommandInvoker.getInstance().execute(
-						new DimensionResizeCommand(id, newWidth, height));
+						new SetDimensionCommand(id, newWidth, height));
 			}
 		});
 		selectedWidth.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -95,7 +97,7 @@ public class PropertyWindow extends GridPane implements Observer {
 				String id = FxElementManager.getInstance().getSelectedId();
 				double newHeight = Double.parseDouble(selectedHeight.getText());
 				CommandInvoker.getInstance().execute(
-						new DimensionResizeCommand(id, width, newHeight));
+						new SetDimensionCommand(id, width, newHeight));
 			}
 		});
 		selectedHeight.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -126,18 +128,6 @@ public class PropertyWindow extends GridPane implements Observer {
 		Label[] labelArray = { xLabel, yLabel, widthLabel, heightLabel, colorLabel };
 		return labelArray;
 	}
-
-	@Override
-	public void onSelect(Element selectedElement) {
-		updatePrivateValues(selectedElement);
-		updateLabels();
-	}
-	
-	@Override
-	public void onChange(Element updatedElement) {
-		updatePrivateValues(updatedElement);
-		updateLabels();
-	}
 	
 	private void updatePrivateValues(Element updatedElement) {
 		x = updatedElement.getP().getX();
@@ -155,5 +145,26 @@ public class PropertyWindow extends GridPane implements Observer {
 		selectedHeight.setText(Double.toString(height));
 		selectedWidth.setText(Double.toString(width));
 		selectedColor.setValue(color.toFxColor());
+	}
+	
+	
+	// Observing SelectState
+	@Override
+	public void onSelect(Element selectedElement) {
+		updatePrivateValues(selectedElement);
+		updateLabels();
+		setVisible(true);
+	}
+	
+	@Override
+	public void onUnSelect() {
+		setVisible(false);
+	}
+	
+	// SelectedElementObserver
+	@Override
+	public void onChange(Element updatedElement) {
+		updatePrivateValues(updatedElement);
+		updateLabels();
 	}
 }

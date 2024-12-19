@@ -5,8 +5,9 @@ import java.io.File;
 import command.CommandInvoker;
 import command.CreateCommand;
 import common.Color;
+import common.CreateInfo;
 import common.Point;
-import common.PropertyDTO;
+
 import view.DrawingPane;
 import view.ToolWindow;
 
@@ -37,15 +38,16 @@ public class CreateState implements ToolState {
 		Point q = new Point(endX, endY);
 		// p, q를 바운드 박스 형태로 변환
 		Color color = toolWindow.getColor();
+		String text = toolWindow.getText();
 		File selectedImageFile = toolWindow.getImageFile();
 		
-		PropertyDTO.Builder builder = new PropertyDTO.Builder(null, type, p, q);
-		PropertyDTO dto = builder.setColor(color)
+		CreateInfo.Builder builder = new CreateInfo.Builder(null, type, p, q);
+		CreateInfo info = builder.setColor(color)
 		.setImageFile(selectedImageFile)
-		//.setText(text);
+		.setText(text)
 		.build();
 
-		CreateCommand createCommand = new CreateCommand(dto);
+		CreateCommand createCommand = new CreateCommand(info);
 		CommandInvoker.getInstance().execute(createCommand);
 	}
 }

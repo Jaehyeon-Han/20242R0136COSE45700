@@ -8,10 +8,8 @@ import common.Color;
 import common.Point;
 
 public class ElementFactory {
-	public Element create(String type, Point p, Point q, 
+	public Element create(String id, String type, Point p, Point q, 
 			Color color, File imageFile, String text) {
-		String id = UUID.randomUUID().toString();
-		
 		switch(type) {
 		case "line": return new Line(id, p, q, color);
 		case "rectangle": return new Rectangle(id, p, q, color);

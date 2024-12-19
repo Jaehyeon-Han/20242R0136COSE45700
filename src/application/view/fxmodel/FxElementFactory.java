@@ -25,6 +25,10 @@ public class FxElementFactory {
 		}
 	}
 
+	public FxElement createComposite(String id, Point p, Point q) {
+		return new FxComposite(id, p, q);
+	}
+
 	// Singleton
 	private FxElementFactory() {
 	}
@@ -36,9 +40,4 @@ public class FxElementFactory {
 	public static FxElementFactory getInstance() {
 		return FxElementFactoryHelper.INSTANCE;
 	}
-
-	public FxElement createComposite(Element element) {
-		return new FxComposite(element.getId());
-	}
-
 }

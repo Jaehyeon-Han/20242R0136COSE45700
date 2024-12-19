@@ -1,12 +1,14 @@
 package view;
 
 import java.io.File;
+import java.util.Optional;
 
 import command.CommandInvoker;
 import common.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
 
 import javafx.stage.FileChooser;
@@ -20,6 +22,7 @@ public class ToolWindow extends GridPane {
 	ComboBox<String> shapeComboBox;
 	ColorPicker colorPicker;
 	File selectedFile;
+	String inputText;
 	
 	public ToolWindow(DrawingPane drawingPane, Stage primaryStage, int width, int height) {
 		this.drawingPane = drawingPane;
@@ -54,6 +57,10 @@ public class ToolWindow extends GridPane {
 		return selectedFile;
 	}
 
+	public String getText() {
+		return inputText;
+	}
+
 	private ColorPicker createColorPicker() {
 		ColorPicker colorPicker = new ColorPicker();
 		colorPicker.setValue(javafx.scene.paint.Color.BLACK);
@@ -70,7 +77,18 @@ public class ToolWindow extends GridPane {
 				fileChooser.getExtensionFilters()
 						.add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
 				selectedFile = fileChooser.showOpenDialog(primaryStage);
+			} else if (shapeComboBox.getValue().equals("text")) {
+				TextInputDialog dialog = new TextInputDialog("Default Value");
+	            dialog.setTitle("Input Dialog");
+	            dialog.setHeaderText("Enter your text:");
+	            dialog.setContentText("Text:");
+
+	            Optional<String> result = dialog.showAndWait();
+
+	            result.ifPresent(input -> inputText = input);
 			}
+		// 분기를 없애려면 버튼을 추상클래스로 묶고 각각에 이벤트 리스너를 추가한 뒤
+		// CreateCommand에 다른 type 인자를 넘겨주는 걸 다형성으로 호출
 		});
 		return shapeComboBox;
 	}
@@ -90,7 +108,7 @@ public class ToolWindow extends GridPane {
 		selectButton.setPrefSize(100, 40);
 		selectButton.setOnAction(actionEvent -> {
 			System.out.println("Select State");
-			drawingPane.setCurrentState(SelectState.getInstance());
+			drawingPane.setCurrentState(new SelectState(drawingPane));
 		});
 		return selectButton;
 	}
@@ -112,4 +130,5 @@ public class ToolWindow extends GridPane {
 		});
 		return undoButton;
 	}
+
 }

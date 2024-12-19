@@ -24,6 +24,6 @@ public class ResizeState implements ToolState {
 		Command resizeCommand = new HandlerResizeCommand
 				(id, new Point(startX, startY), new Point(x, y));
 		CommandInvoker.getInstance().execute(resizeCommand);
-		drawingPane.setCurrentState(SelectState.getInstance());
+		drawingPane.setCurrentState(new SelectState(drawingPane));
 	}
 }

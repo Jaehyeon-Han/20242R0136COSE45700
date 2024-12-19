@@ -6,7 +6,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 import common.Point;
-import common.PropertyDTO;
+import common.ModelInfo;
 
 public class Image extends BoxedElement {
     private File imageFile;
@@ -36,9 +36,9 @@ public class Image extends BoxedElement {
     }
 
 	@Override
-	public PropertyDTO toDTO() {
-		PropertyDTO.Builder builder = new PropertyDTO.Builder(id, "image", p, q);
-		PropertyDTO dto = builder
+	public ModelInfo getModelInfo() {
+		ModelInfo.Builder builder = new ModelInfo.Builder(id, "image", p, q);
+		ModelInfo dto = builder
 			.setImageFile(imageFile)
 			.build();
 		return dto;

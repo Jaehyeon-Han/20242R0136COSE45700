@@ -2,7 +2,7 @@ package model;
 
 import common.Color;
 import common.Point;
-import common.PropertyDTO;
+import common.ModelInfo;
 import java.util.UUID;
 
 public class Text extends BoxedElement {
@@ -19,9 +19,9 @@ public class Text extends BoxedElement {
 	}
 
 	@Override
-	public PropertyDTO toDTO() {
-		PropertyDTO.Builder builder = new PropertyDTO.Builder(id, "text", p, q);
-		PropertyDTO dto = builder
+	public ModelInfo getModelInfo() {
+		ModelInfo.Builder builder = new ModelInfo.Builder(id, "text", p, q);
+		ModelInfo dto = builder
 			.setColor(color)
 			.setText(content)
 			.build();

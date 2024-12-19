@@ -2,7 +2,6 @@ package view.fxmodel;
 
 import common.Color;
 import common.Point;
-import common.PropertyDTO;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import model.Element;
@@ -10,13 +9,16 @@ import model.Element;
 public class FxRectangle extends FxElement {
 	private Rectangle fxRectangle;
 	private Point topLeft, bottomRight;
+	private Color color;
 	
 	public FxRectangle(String id, Point p, Point q, Color color) {
 		super(id);
-		fxRectangle = new Rectangle(p.getX(), p.getY(), q.getX() - p.getX(), q.getY() - p.getY());
-		this.setColor(color);
 		this.topLeft = p;
 		this.bottomRight = q;
+		this.color = color;
+		
+		fxRectangle = new Rectangle(p.getX(), p.getY(), q.getX() - p.getX(), q.getY() - p.getY());
+		this.setColor(color);
 	}
 	
 	@Override
@@ -29,14 +31,6 @@ public class FxRectangle extends FxElement {
 	public void setQ(Point q) {
 		this.bottomRight = q;
 		update();
-	}
-	
-	public Point getP() {
-		return this.topLeft;
-	}
-	
-	public Point getQ() {
-		return this.bottomRight;
 	}
 	
 	private void update() {
@@ -60,8 +54,15 @@ public class FxRectangle extends FxElement {
 	}
 
 	@Override
-	void setOpacity(double opacity) {
-		fxRectangle.setOpacity(opacity);
+	public void highlight() {
+		fxRectangle.setOpacity(0.7);
+		fxRectangle.setStroke(javafx.scene.paint.Color.BLUE);
+	}
+	
+	@Override
+	public void unHighlight() {
+		fxRectangle.setOpacity(1);
+		fxRectangle.setStroke(javafx.scene.paint.Color.TRANSPARENT);
 	}
 
 	@Override

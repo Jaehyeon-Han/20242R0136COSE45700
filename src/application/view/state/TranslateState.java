@@ -3,15 +3,15 @@ package view.state;
 import command.Command;
 import command.CommandInvoker;
 import command.TranslateCommand;
+
 import view.DrawingPane;
 import view.fxmodel.FxElementManager;
 
 public class TranslateState implements ToolState {
-	private double startX, startY, endX, endY;
+	private double startX, startY;
 	private DrawingPane drawingPane;
-	private static final int CLICK_THRESHOLD = 5;
 	
-	public TranslateState(double x, double y, DrawingPane drawingPane) {
+	public TranslateState(DrawingPane drawingPane, double x, double y) {
 		System.out.println("Translate State");
 		startX = x;
 		startY = y;
@@ -19,20 +19,12 @@ public class TranslateState implements ToolState {
 	}
 	
 	@Override
-	public void handleMouseReleased(double x, double y) {
-		endX = x;
-		endY = y;
+	public void handleMouseReleased(double endX, double endY) {
+		String id = FxElementManager.getInstance().getSelectedId();
 		
-		double deltaX = Math.abs(x - startX);
-		double deltaY = Math.abs(y - startY);
-
-		if (deltaX > CLICK_THRESHOLD || deltaY > CLICK_THRESHOLD) {
-			String id = FxElementManager.getInstance().getSelectedId();
-			
-			Command translateCommand = new TranslateCommand(id, endX - startX, endY - startY);
-			CommandInvoker.getInstance().execute(translateCommand);
-		}
+		Command translateCommand = new TranslateCommand(id, endX - startX, endY - startY);
+		CommandInvoker.getInstance().execute(translateCommand);
 		
-		drawingPane.setCurrentState(SelectState.getInstance());
+		drawingPane.setCurrentState(new SelectState(drawingPane));
 	}
 }

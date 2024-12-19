@@ -1,10 +1,9 @@
 package command;
 
 import common.Point;
-import controller.Controller;
+import model.ElementManager;
 
 public class HandlerResizeCommand implements Command {
-	private Controller controller;
 	private Point oldQ, newQ;
 	private String id;
 	
@@ -16,16 +15,11 @@ public class HandlerResizeCommand implements Command {
 	
 	@Override
 	public void execute() {
-		controller.resize(id, newQ);
-	}
-	
-	@Override
-	public void setController(Controller controller) {
-		this.controller = controller;
+		ElementManager.getInstance().getElement(id).setQ(newQ);
 	}
 
 	@Override
 	public void undo() {
-		controller.resize(id, oldQ);
+		ElementManager.getInstance().getElement(id).setQ(oldQ);
 	}
 }

@@ -2,18 +2,18 @@ package model;
 
 import common.Color;
 import common.Point;
-import common.PropertyDTO;
+import common.ModelInfo;
 
 public class Ellipse extends BoxedElement {
-	public Ellipse(String id, Point a, Point b, Color color) {
-		super(id, a, b);
+	public Ellipse(String id, Point p, Point q, Color color) {
+		super(id, p, q);
 		this.color = color;
 	}
 
 	@Override
-	public PropertyDTO toDTO() {
-		PropertyDTO.Builder builder = new PropertyDTO.Builder(id, "ellipse", p, q);
-		PropertyDTO dto = builder
+	public ModelInfo getModelInfo() {
+		ModelInfo.Builder builder = new ModelInfo.Builder(id, "ellipse", p, q);
+		ModelInfo dto = builder
 				.setColor(color)
 				.build();
 		return dto;

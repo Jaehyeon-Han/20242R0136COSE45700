@@ -2,7 +2,7 @@ package model;
 
 import common.Color;
 import common.Point;
-import common.PropertyDTO;
+import common.ModelInfo;
 
 public class Rectangle extends BoxedElement {
 	public Rectangle(String id, Point a, Point b, Color color) {
@@ -11,9 +11,9 @@ public class Rectangle extends BoxedElement {
 	}
 
 	@Override
-	public PropertyDTO toDTO() {
-		PropertyDTO.Builder builder = new PropertyDTO.Builder(id, "rectangle", p, q);
-		PropertyDTO dto = builder
+	public ModelInfo getModelInfo() {
+		ModelInfo.Builder builder = new ModelInfo.Builder(id, "rectangle", p, q);
+		ModelInfo dto = builder
 			.setColor(color)
 			.build();
 		return dto;

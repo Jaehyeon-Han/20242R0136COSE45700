@@ -2,17 +2,18 @@ package view.fxmodel;
 
 import common.Color;
 import common.Point;
-import common.PropertyDTO;
 import javafx.scene.Node;
-import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import model.Element;
 
 public class FxLine extends FxElement {
 	private Line fxLine;
+	private Color color;
 	
 	public FxLine(String id, Point p, Point q, Color color) {
 		super(id);
+		this.color = color;
+		
 		fxLine = new Line(p.getX(), p.getY(), q.getX(), q.getY());
 		this.setColor(color);
 	}
@@ -31,6 +32,7 @@ public class FxLine extends FxElement {
 
 	@Override
 	public void setColor(Color color) {
+		this.color = color;
 		fxLine.setStroke(color.toFxColor());
 	}
 
@@ -42,11 +44,17 @@ public class FxLine extends FxElement {
 	}
 
 	@Override
-	void setOpacity(double opacity) {
+	public void highlight() {
+		fxLine.setStroke(javafx.scene.paint.Color.BLUE);
+	}
+	
+	@Override
+	public void unHighlight() {
+		fxLine.setStroke(color.toFxColor());
 	}
 
 	@Override
 	public Node getNode() {
 		return fxLine;
-	}	
+	}
 }

@@ -2,13 +2,14 @@ package common;
 
 import java.io.File;
 
-public class PropertyDTO {
-    private final String id, type, text;
+public class ModelInfo {
+    private String id;
+	private final String type, text;
     private final Point p, q;
     private final Color color;
     private final File imageFile;
 
-    private PropertyDTO(Builder builder) {
+    private ModelInfo(Builder builder) {
         this.id = builder.id;
         this.type = builder.type;
         this.p = builder.p;
@@ -18,6 +19,10 @@ public class PropertyDTO {
         this.imageFile = builder.imageFile;
     }
 
+    public void setId(String id) {
+    	this.id = id;
+    }
+    
     public String getId() {
         return id;
     }
@@ -83,8 +88,8 @@ public class PropertyDTO {
             return this;
         }
 
-        public PropertyDTO build() {
-            return new PropertyDTO(this);
+        public ModelInfo build() {
+            return new ModelInfo(this);
         }
     }
 }

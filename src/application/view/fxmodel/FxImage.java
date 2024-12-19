@@ -4,7 +4,7 @@ import java.io.File;
 
 import common.Color;
 import common.Point;
-import common.PropertyDTO;
+import common.ModelInfo;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,13 +16,14 @@ public class FxImage extends FxElement {
 	
 	public FxImage(String id, Point p, Point q, File imageFile) {
 		super(id);
+		this.topLeft = p;
+		this.bottomRight = q;
+		
 		fxImage = new ImageView(imageFile.toURI().toString());
 		fxImage.setX(p.getX());
 		fxImage.setY(p.getY());
 		setWidth(q.getX() - p.getX());
 		setHeight(q.getY() - p.getY());
-		this.topLeft = p;
-		this.bottomRight = q;
 	}
 	
 	@Override
@@ -42,14 +43,6 @@ public class FxImage extends FxElement {
 		setHeight(bottomRight.getY() - topLeft.getY());
 		fxImage.setX(topLeft.getX());
 		fxImage.setY(topLeft.getY());
-	}
-
-	public Point getP() {
-		return this.topLeft;
-	}
-	
-	public Point getQ() {
-		return this.bottomRight;
 	}
 	
 	private void setWidth(double width) {
@@ -72,12 +65,17 @@ public class FxImage extends FxElement {
 	}
 
 	@Override
-	void setOpacity(double opacity) {
-		fxImage.setOpacity(opacity);
+	public Node getNode() {
+		return fxImage;
 	}
 
 	@Override
-	public Node getNode() {
-		return fxImage;
-	}	
+	public void highlight() {
+		fxImage.setOpacity(0.7);
+	}
+	
+	@Override
+	public void unHighlight() {
+		fxImage.setOpacity(1);
+	}
 }

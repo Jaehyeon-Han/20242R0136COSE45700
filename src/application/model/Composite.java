@@ -5,7 +5,7 @@ import java.util.List;
 
 import common.Color;
 import common.Point;
-import common.PropertyDTO;
+import common.ModelInfo;
 
 public class Composite extends BoxedElement {
 	List<Element> children = new ArrayList<Element>();
@@ -23,13 +23,13 @@ public class Composite extends BoxedElement {
 		this.p = this.q;
 		this.q = tmp;
 	}
-
-	public void addChild(Element element) {
-		updateBound(element);
-		if(!isColorMixed) {
-			updateColor(element);			
+	
+	@Override
+	public void setColor(Color color) {
+		for(Element element : children) {
+			element.setColor(color);
 		}
-		children.add(element);
+		this.color = color;
 	}
 	
 	private void updateColor(Element element) {
@@ -43,31 +43,6 @@ public class Composite extends BoxedElement {
 			}
 		}
 	}
-
-	private void updateBound(Element element) {
-		p.setX(Math.min(p.getX(), element.p.getX()));
-		p.setY(Math.min(p.getY(), element.p.getY()));
-		q.setX(Math.max(q.getX(), element.q.getX()));
-		q.setY(Math.max(q.getY(), element.q.getY()));
-	}
-	
-	public void removeChild(Element element) {
-		double x1 = p.getX(), y1 = p.getY();
-		double x2 = q.getX(), y2 = q.getY();
-		
-		children.remove(element);
-		if(element.getP().getX() == x1 || element.getP().getY() == y1 || 
-				element.getQ().getX() == x2 || element.getQ().getY() == y2) {
-			recalculateBound();
-		}
-	}
-	
-	@Override
-	public void remove() {
-		for(Element element : children) {
-			element.remove();
-		}
-	}
 	
 	@Override
 	public void translate(double dx, double dy) {
@@ -78,6 +53,42 @@ public class Composite extends BoxedElement {
 		p.setY(p.getY() + dy);
 		q.setX(q.getX() + dx);
 		q.setY(q.getY() + dy);
+		notifyOnChange();
+	}
+	
+	public void setWidth(double width) {
+		if(width <= 0) {
+			return;
+		}
+		
+		q.setX(p.getX() + width);
+		resize(width, getHeight());
+		notifyOnChange();
+	}
+
+	public void setHeight(double height) {
+		if(height <= 0) {
+			return;
+		}
+		
+		q.setY(p.getY() + height);
+		resize(getWidth(), height);
+		notifyOnChange();
+	}
+	
+	public void resize(double width, double height) {
+		setQ(new Point(p.getX() + width, p.getY() + height));
+	}
+	
+	public void setQ(Point q) {
+		if(q.getX() < 0 || q.getY() < 0) {
+			return;
+		}
+		double originalWidth = getWidth();
+		double originalHeight = getHeight();
+		this.q = q;
+		adjustChildren(originalWidth, originalHeight);
+		notifyOnChange();
 	}
 	
 	private void adjustChildren(double originalWidth, double originalHeight) {
@@ -100,24 +111,12 @@ public class Composite extends BoxedElement {
 			child.setHeight(childHeight * yWeight);
 		}
 	}
-	
-	public void resize(double width, double height) {
-		setQ(new Point(p.getX() + width, p.getY() + height));
-	}
-	
-	public void setQ(Point q) {
-		if(q.getX() < 0 || q.getY() < 0) {
-			return;
-		}
-		double originalWidth = getWidth();
-		double originalHeight = getHeight();
-		this.q = q;
-		adjustChildren(originalWidth, originalHeight);
-		updateMatchingNode();
-	}
-	
-	public List<Element> getChildren() {
-		return this.children;
+
+	private void updateBound(Element element) {
+		p.setX(Math.min(p.getX(), element.p.getX()));
+		p.setY(Math.min(p.getY(), element.p.getY()));
+		q.setX(Math.max(q.getX(), element.q.getX()));
+		q.setY(Math.max(q.getY(), element.q.getY()));
 	}
 	
 	private void recalculateBound() {
@@ -126,37 +125,31 @@ public class Composite extends BoxedElement {
 		}
 	}
 	
-	@Override
-	public void setColor(Color color) {
-		for(Element element : children) {
-			element.setColor(color);
+	public void addChild(Element element) {
+		updateBound(element);
+		if(!isColorMixed) {
+			updateColor(element);			
 		}
-		this.color = color;
+		children.add(element);
 	}
-
-
-	public void setWidth(double width) {
-		if(width <= 0) {
-			return;
-		}
+	
+	public void removeChild(Element element) {
+		double x1 = p.getX(), y1 = p.getY();
+		double x2 = q.getX(), y2 = q.getY();
 		
-		q.setX(p.getX() + width);
-		resize(width, getHeight());
-		updateMatchingNode();
+		children.remove(element);
+		if(element.getP().getX() == x1 || element.getP().getY() == y1 || 
+				element.getQ().getX() == x2 || element.getQ().getY() == y2) {
+			recalculateBound();
+		}
 	}
-
-	public void setHeight(double height) {
-		if(height <= 0) {
-			return;
-		}
-		
-		q.setY(p.getY() + height);
-		resize(getWidth(), height);
-		updateMatchingNode();
+	
+	public List<Element> getChildren() {
+		return this.children;
 	}
 
 	@Override
-	public PropertyDTO toDTO() {
+	public ModelInfo getModelInfo() {
 		return null;
 	}
 }

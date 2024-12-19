@@ -1,32 +1,28 @@
 package command;
 
 import common.Color;
-import controller.Controller;
 import model.Element;
 import model.ElementManager;
 
 public class SetColorCommand implements Command {
+	private String id;
 	private Color oldColor, newColor;
-	Element element;
 	
 	public SetColorCommand(String id, Color oldColor, Color newColor) {
+		this.id = id;
 		this.oldColor = oldColor;
 		this.newColor = newColor;
-		element = ElementManager.getInstance().getElement(id);
 	}
 	
 	@Override
 	public void execute() {
+		Element element = ElementManager.getInstance().getElement(id);
 		element.setColor(newColor);
 	}
 
 	@Override
 	public void undo() {
+		Element element = ElementManager.getInstance().getElement(id);
 		element.setColor(oldColor);
 	}
-
-	@Override
-	public void setController(Controller controller) {
-	}
-
 }

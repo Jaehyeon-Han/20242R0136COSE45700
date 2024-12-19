@@ -2,7 +2,7 @@ package model;
 
 import common.Color;
 import common.Point;
-import common.PropertyDTO;
+import common.ModelInfo;
 
 public class Line extends Element {
 	private static final double dThreshold = 20;
@@ -17,7 +17,7 @@ public class Line extends Element {
 	}
 	
 	@Override
-	public boolean isInHere(Point r) {
+	public boolean isHit(Point r) {
 		double x1 = p.getX(), x2 = q.getX(), x = r.getX();
 		double y1 = p.getY(), y2 = q.getY(), y = r.getY();
 		
@@ -36,9 +36,9 @@ public class Line extends Element {
 	}
 
 	@Override
-	public PropertyDTO toDTO() {
-		PropertyDTO.Builder builder = new PropertyDTO.Builder(id, "line", p, q);
-		PropertyDTO dto = builder
+	public ModelInfo getModelInfo() {
+		ModelInfo.Builder builder = new ModelInfo.Builder(id, "line", p, q);
+		ModelInfo dto = builder
 			.setColor(color)
 			.build();
 		return dto;
@@ -69,7 +69,7 @@ public class Line extends Element {
 	        p.getX() + directionX * width,
 	        p.getY() + directionY * width
 	    );
-	    updateMatchingNode();
+	    notifyOnChange();
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class Line extends Element {
 	    double rectY2 = Math.max(rectP1.getY(), rectP2.getY());
 
 	    // Check if either endpoint of the line is inside the rectangle
-	    if (isInHere(rectP1) || isInHere(rectP2)) {
+	    if (isHit(rectP1) || isHit(rectP2)) {
 	        return true;
 	    }
 
