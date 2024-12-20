@@ -3,9 +3,10 @@
 세세한 기능 구현보다 디자인 패턴의 활용과 전체 프로그램의 디자인을 중점적으로 보았다. 전체적으로는 MVC 패턴에 기반하였으나 컨트롤러가 State객체와 Command로 많이 분리된 구조이다.
 
 ## 전체 구조 클래스 다이어그램: 이벤트 흐름은 12시부터 반시계 진행
-![UML Class Diagram](/UML Class Diagram.png)
+![UML Class Diagram](https://github.com/user-attachments/assets/31351028-2213-4293-ab06-876c78519992)
 
 ## 사용한 디자인 패턴과 목적
+
 1. State Pattern: 사용자의 마우스 이벤트를 분기 없이 처리하기 위해 사용하였다. ToolState 인터페이스를 정의하고 각 State 클래스에서 마우스 이벤트를 처리하고, 다음 상태로 전이하였다.
 2: Abstract Factory Pattern: Element와 FxElement의 생성 책임을 팩토리로 위임하였다.
 3. Singleton Pattern: 다수의 객체가 필요하지 않고 전역적으로 접근하면 편리한 Factory와 ElementSelector 등에 사용하였다. 단위 테스트가 어렵고, 싱글톤 객체에 대한 의존성이 증가하는 경향이 있어 더 좋은 구조를 찾아보면 좋을 것 같다.
