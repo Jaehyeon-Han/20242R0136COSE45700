@@ -8,14 +8,13 @@ import view.DrawingPane;
 import view.fxmodel.FxElementManager;
 
 public class TranslateState implements ToolState {
-	private double startX, startY;
 	private DrawingPane drawingPane;
+	private double startX, startY;
 	
 	public TranslateState(DrawingPane drawingPane, double x, double y) {
-		System.out.println("Translate State");
+		this.drawingPane = drawingPane;
 		startX = x;
 		startY = y;
-		this.drawingPane = drawingPane;
 	}
 	
 	@Override

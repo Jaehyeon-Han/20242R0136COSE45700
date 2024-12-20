@@ -15,13 +15,7 @@ public class Composite extends BoxedElement {
 	
 	public Composite(String id) {
 		super(id, new Point(max_val, max_val), new Point(0, 0));
-		swapPQ();
-	}
-	
-	private void swapPQ() {
-		Point tmp = p;
-		this.p = this.q;
-		this.q = tmp;
+		initializePQ();
 	}
 	
 	@Override
@@ -30,6 +24,7 @@ public class Composite extends BoxedElement {
 			element.setColor(color);
 		}
 		this.color = color;
+		notifyChange();
 	}
 	
 	private void updateColor(Element element) {
@@ -53,7 +48,7 @@ public class Composite extends BoxedElement {
 		p.setY(p.getY() + dy);
 		q.setX(q.getX() + dx);
 		q.setY(q.getY() + dy);
-		notifyOnChange();
+		notifyChange();
 	}
 	
 	public void setWidth(double width) {
@@ -63,7 +58,6 @@ public class Composite extends BoxedElement {
 		
 		q.setX(p.getX() + width);
 		resize(width, getHeight());
-		notifyOnChange();
 	}
 
 	public void setHeight(double height) {
@@ -73,11 +67,11 @@ public class Composite extends BoxedElement {
 		
 		q.setY(p.getY() + height);
 		resize(getWidth(), height);
-		notifyOnChange();
 	}
 	
 	public void resize(double width, double height) {
 		setQ(new Point(p.getX() + width, p.getY() + height));
+		notifyChange();
 	}
 	
 	public void setQ(Point q) {
@@ -88,7 +82,7 @@ public class Composite extends BoxedElement {
 		double originalHeight = getHeight();
 		this.q = q;
 		adjustChildren(originalWidth, originalHeight);
-		notifyOnChange();
+		notifyChange();
 	}
 	
 	private void adjustChildren(double originalWidth, double originalHeight) {
@@ -120,9 +114,17 @@ public class Composite extends BoxedElement {
 	}
 	
 	private void recalculateBound() {
+		initializePQ();
 		for(Element element : children) {
 			updateBound(element);
 		}
+	}
+
+	private void initializePQ() {
+		p.setX(max_val);
+		p.setY(max_val);
+		q.setX(0);
+		q.setY(0);
 	}
 	
 	public void addChild(Element element) {

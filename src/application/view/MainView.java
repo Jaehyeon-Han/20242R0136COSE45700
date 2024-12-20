@@ -8,7 +8,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import view.fxmodel.FxElementManager;
-import view.state.SelectState;
 
 public class MainView extends Application {
 	private DrawingPane drawingPane;
@@ -20,6 +19,7 @@ public class MainView extends Application {
 		drawingPane = new DrawingPane();
 		toolWindow = new ToolWindow(drawingPane, primaryStage, 300, 150);
 		propertyWindow = new PropertyWindow(300, 350);
+		
 		setModelDependencies();
 		setViewDependencies();
 		
@@ -32,7 +32,7 @@ public class MainView extends Application {
 		container.setRight(windowsContainer);
 
 		Scene scene = new Scene(container, 1010, 500);
-		primaryStage.setTitle("Graphics Editor");
+		primaryStage.setTitle("Vector Graphic Editor");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}

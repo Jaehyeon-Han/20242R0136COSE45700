@@ -4,9 +4,7 @@ import java.io.File;
 
 import common.Color;
 import common.Point;
-import common.ModelInfo;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Element;
 
@@ -26,23 +24,15 @@ public class FxImage extends FxElement {
 		setHeight(q.getY() - p.getY());
 	}
 	
+	// Setters
 	@Override
 	public void setP(Point p) {
 		this.topLeft = p;
-		update();
 	}
 
 	@Override
 	public void setQ(Point q) {
 		this.bottomRight = q;
-		update();
-	}
-	
-	private void update() {
-		setWidth(bottomRight.getX() - topLeft.getX());
-		setHeight(bottomRight.getY() - topLeft.getY());
-		fxImage.setX(topLeft.getX());
-		fxImage.setY(topLeft.getY());
 	}
 	
 	private void setWidth(double width) {
@@ -57,11 +47,20 @@ public class FxImage extends FxElement {
 	public void setColor(Color color) {
 		// Do nothing
 	}
-
+	
+	private void updateBound() {
+		setWidth(bottomRight.getX() - topLeft.getX());
+		setHeight(bottomRight.getY() - topLeft.getY());
+		fxImage.setX(topLeft.getX());
+		fxImage.setY(topLeft.getY());
+	}
+	
+	// Observer
 	@Override
 	public void onChange(Element element) {
 		setP(element.getP());
 		setQ(element.getQ());
+		updateBound();
 	}
 
 	@Override

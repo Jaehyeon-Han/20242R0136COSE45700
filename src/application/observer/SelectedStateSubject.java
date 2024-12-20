@@ -7,7 +7,7 @@ public interface SelectedStateSubject {
 
     public void removeObserver(SelectedStateObserver observer);
     
-	public void notifyOnSelect(Element selectedElement);
+	public void notifySelect(Element selectedElement);
 
-	public void notifyOnUnSelect();
+	public void notifyUnSelect();
 }

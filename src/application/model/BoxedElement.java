@@ -25,14 +25,14 @@ abstract public class BoxedElement extends Element {
 	public void setP(Point p) {
 		this.p = p;
 		setTopLeftAndBottomRight(); // Should guarantee that P is topLeft when modified
-		notifyOnChange();
+		notifyChange();
 	}
 	
 	@Override
 	public void setQ(Point q) {
 		this.q = q;
 		setTopLeftAndBottomRight(); // Should guarantee that P is topLeft when modified
-		notifyOnChange();
+		notifyChange();
 	} 
 
 	public double getWidth() {
@@ -45,7 +45,7 @@ abstract public class BoxedElement extends Element {
 		}
 		
 		q.setX(p.getX() + width);
-		notifyOnChange();
+		notifyChange();
 	}
 
 	public double getHeight() {
@@ -58,7 +58,7 @@ abstract public class BoxedElement extends Element {
 		}
 		
 		q.setY(p.getY() + height);
-		notifyOnChange();
+		notifyChange();
 	}
 	
 	// Hit Test for Two Boxes

@@ -4,8 +4,8 @@ import common.Point;
 import model.ElementManager;
 
 public class HandlerResizeCommand implements Command {
-	private Point oldQ, newQ;
 	private String id;
+	private Point oldQ, newQ;
 	
 	public HandlerResizeCommand(String id, Point oldQ, Point newQ) {
 		this.id = id;

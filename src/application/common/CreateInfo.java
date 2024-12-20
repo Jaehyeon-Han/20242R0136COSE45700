@@ -2,8 +2,6 @@ package common;
 
 import java.io.File;
 
-import common.ModelInfo.Builder;
-
 public class CreateInfo {
     private String id;
 	private final String type, text;
@@ -69,11 +67,6 @@ public class CreateInfo {
             this.p = p;
             this.q = q;
         }
-
-//        public Builder setId(String id) {
-//            this.id = id;
-//            return this;
-//        }
         
         public Builder setColor(Color color) {
             this.color = color;

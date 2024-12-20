@@ -67,11 +67,6 @@ public class ModelInfo {
             this.p = p;
             this.q = q;
         }
-
-//        public Builder setId(String id) {
-//            this.id = id;
-//            return this;
-//        }
         
         public Builder setColor(Color color) {
             this.color = color;

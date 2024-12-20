@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import command.CommandInvoker;
 import common.Color;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -29,7 +31,7 @@ public class ToolWindow extends GridPane {
 		
 		Button selectButton = createSelectButton();
 		Button createButton = createCreateButton();
-		Button undoButton = createUndobutton();
+		Button undoButton = createUndoButton();
 		Button redoButton = createRedoButton();
 		shapeComboBox = createTypeComboBox(primaryStage);
 		colorPicker = createColorPicker();
@@ -78,57 +80,55 @@ public class ToolWindow extends GridPane {
 						.add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
 				selectedFile = fileChooser.showOpenDialog(primaryStage);
 			} else if (shapeComboBox.getValue().equals("text")) {
-				TextInputDialog dialog = new TextInputDialog("Default Value");
-	            dialog.setTitle("Input Dialog");
-	            dialog.setHeaderText("Enter your text:");
-	            dialog.setContentText("Text:");
-
-	            Optional<String> result = dialog.showAndWait();
-
-	            result.ifPresent(input -> inputText = input);
+				getTextInput();
 			}
-		// 분기를 없애려면 버튼을 추상클래스로 묶고 각각에 이벤트 리스너를 추가한 뒤
-		// CreateCommand에 다른 type 인자를 넘겨주는 걸 다형성으로 호출
+			// 분기를 안 타려면 전략이나 상태 패턴 사용
+			// 아니면 ComboBox 대신 버튼을 나누고 다형성 이용
 		});
 		return shapeComboBox;
 	}
 
+	private void getTextInput() {
+		TextInputDialog dialog = new TextInputDialog("Default Value");
+		dialog.setTitle("Input Dialog");
+		dialog.setHeaderText("Enter your text:");
+		dialog.setContentText("Text:");
+
+		Optional<String> result = dialog.showAndWait();
+
+		result.ifPresent(input -> inputText = input);
+	}
+
+	private Button createButton(String text, int width, int height, EventHandler<ActionEvent> actionHandler) {
+	    Button button = new Button(text);
+	    button.setPrefSize(width, height);
+	    button.setOnAction(actionHandler);
+	    return button;
+	}
+
 	private Button createCreateButton() {
-		Button createButton = new Button("Create");
-		createButton.setPrefSize(100, 40);
-		createButton.setOnAction(actionEvent -> {
-			drawingPane.setCurrentState(new CreateState(drawingPane));
-			HandlerManager.getInstance().detachHandler();
-		});
-		return createButton;
+	    return createButton("Create", 100, 40, actionEvent -> {
+	        drawingPane.setCurrentState(new CreateState(drawingPane));
+	        HandlerManager.getInstance().detachHandler();
+	    });
 	}
 
 	private Button createSelectButton() {
-		Button selectButton = new Button("Select");
-		selectButton.setPrefSize(100, 40);
-		selectButton.setOnAction(actionEvent -> {
-			System.out.println("Select State");
-			drawingPane.setCurrentState(new SelectState(drawingPane));
-		});
-		return selectButton;
-	}
-	
-	private Button createRedoButton() {
-		Button redoButton = new Button("Redo");
-		redoButton.setPrefSize(100, 40);
-		redoButton.setOnAction(actionEvent -> {
-			CommandInvoker.getInstance().redo();
-		});
-		return redoButton;
+	    return createButton("Select", 100, 40, actionEvent -> {
+	        drawingPane.setCurrentState(new SelectState(drawingPane));
+	    });
 	}
 
-	private Button createUndobutton() {
-		Button undoButton = new Button("Undo");
-		undoButton.setPrefSize(100, 40);
-		undoButton.setOnAction(actionEvent -> {
-			CommandInvoker.getInstance().undo();
-		});
-		return undoButton;
+	private Button createRedoButton() {
+	    return createButton("Redo", 100, 40, actionEvent -> {
+	        CommandInvoker.getInstance().redo();
+	    });
+	}
+
+	private Button createUndoButton() {
+	    return createButton("Undo", 100, 40, actionEvent -> {
+	        CommandInvoker.getInstance().undo();
+	    });
 	}
 
 }

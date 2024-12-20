@@ -7,13 +7,13 @@ import java.util.Map;
 
 import common.CreateInfo;
 import controller.SelectedElementManager;
-import observer.ModelListObserver;
-import observer.ModelListSubject;
+import observer.ElementListObserver;
+import observer.ElementListSubject;
 
-public class ElementManager implements ModelListSubject {
+public class ElementManager implements ElementListSubject {
     private List<Element> elements = new ArrayList<>();
     private Map<String, Element> idMap = new HashMap<>();
-    private List<ModelListObserver> observers = new ArrayList<>();
+    private List<ElementListObserver> observers = new ArrayList<>();
     
     public void add(CreateInfo info) {
     	 Element newElement = ElementFactory.getInstance().create(
@@ -27,13 +27,13 @@ public class ElementManager implements ModelListSubject {
     	        );
     	idMap.put(newElement.getId(), newElement);
         elements.add(newElement);
-        notifyOnCreate(newElement);
+        notifyCreate(newElement);
 	}
 
 	public void remove(String id) {
 		Element toRemove = idMap.get(id);
 		elements.remove(toRemove);
-		notifyOnRemove(toRemove);
+		notifyRemove(toRemove);
 	}
 
 	public Element getElement(String id) {
@@ -53,22 +53,22 @@ public class ElementManager implements ModelListSubject {
     }
     
     // ModelListObserver Subject
-    public void addObserver(ModelListObserver observer) {
+    public void addObserver(ElementListObserver observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(ModelListObserver observer) {
+    public void removeObserver(ElementListObserver observer) {
         observers.remove(observer);
     }
     
-	public void notifyOnCreate(Element element) {
-		for(ModelListObserver observer: observers) {
+	public void notifyCreate(Element element) {
+		for(ElementListObserver observer: observers) {
 			observer.onCreate(element);
 		}
 	}
 
-	public void notifyOnRemove(Element element) {
-		for(ModelListObserver observer: observers) {
+	public void notifyRemove(Element element) {
+		for(ElementListObserver observer: observers) {
 			observer.onRemove(element);
 		}
 	}

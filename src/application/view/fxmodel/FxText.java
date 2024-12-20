@@ -9,9 +9,9 @@ import javafx.scene.text.Text;
 import model.Element;
 
 public class FxText extends FxElement {
-	private Rectangle boundBox;
 	private Text fxText;
     private Point topLeft, bottomRight;
+    private Rectangle boundBox;
     
     public FxText(String id, Point p, Point q, Color color, String text) {
         super(id);
@@ -24,46 +24,35 @@ public class FxText extends FxElement {
         
         fxText = new Text(text);
         setColor(color);
-        update();
+        updateBound();
     }
-
-    private void alignTextInBox() {
-        // 텍스트의 너비와 높이 계산
-        double width = Math.abs(bottomRight.getX() - topLeft.getX());
-        double height = Math.abs(bottomRight.getY() - topLeft.getY());
-
-        // wrappingWidth와 X 좌표를 일치시킴
-        fxText.setWrappingWidth(width);
-        fxText.setX(Math.min(topLeft.getX(), bottomRight.getX())); // 상자의 왼쪽 경계
-
-        // Y 좌표는 텍스트의 높이를 보정하여 설정
-        double textHeight = fxText.getBoundsInLocal().getHeight();
-        fxText.setY(Math.min(topLeft.getY(), bottomRight.getY()) + textHeight);
-    }
-
+    
+    // Setters
     @Override
     public void setP(Point p) {
         this.topLeft = p;
-        update();
     }
 
     @Override
     public void setQ(Point q) {
         this.bottomRight = q;
-        update();
+    }
+    
+    private void setWidth(double width) {
+        fxText.setWrappingWidth(width);
     }
 
-    public Point getP() {
-        return this.topLeft;
+    private void setHeight(double height) {
+        // 현재 구현에서는 높이 조정 필요 없음
     }
 
-    public Point getQ() {
-        return this.bottomRight;
+    @Override
+    public void setColor(Color color) {
+        fxText.setFill(color.toFxColor());
     }
 
-    private void update() {
+    private void updateBound() {
         double width = Math.abs(bottomRight.getX() - topLeft.getX());
-        double height = Math.abs(bottomRight.getY() - topLeft.getY());
 
         boundBox.setWidth(bottomRight.getX() - topLeft.getX());
 		boundBox.setHeight(bottomRight.getY() - topLeft.getY());
@@ -74,23 +63,25 @@ public class FxText extends FxElement {
         alignTextInBox();
     }
 
-    public void setWidth(double width) {
+    private void alignTextInBox() {
+        // 텍스트의 너비 계산
+        double width = Math.abs(bottomRight.getX() - topLeft.getX());
+
+        // wrappingWidth와 X 좌표를 일치시킴
         fxText.setWrappingWidth(width);
+        fxText.setX(Math.min(topLeft.getX(), bottomRight.getX())); // 상자의 왼쪽 경계
+
+        // Y 좌표는 텍스트의 높이를 보정하여 설정
+        double textHeight = fxText.getBoundsInLocal().getHeight();
+        fxText.setY(Math.min(topLeft.getY(), bottomRight.getY()) + textHeight);
     }
 
-    public void setHeight(double height) {
-        // 현재 구현에서는 높이 조정 필요 없음
-    }
-
-    @Override
-    public void setColor(Color color) {
-        fxText.setFill(color.toFxColor());
-    }
-
+    //ModelChange Observer
     @Override
     public void onChange(Element element) {
         setP(element.getP());
         setQ(element.getQ());
+        updateBound();
         setColor(element.getColor());
     }
 
@@ -110,6 +101,5 @@ public class FxText extends FxElement {
     public Node getNode() {
     	Group group = new Group(boundBox, fxText);
         return group;
-    	// return fxText;
     }
 }

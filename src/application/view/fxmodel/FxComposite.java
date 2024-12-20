@@ -10,9 +10,9 @@ import javafx.scene.shape.Rectangle;
 import model.Element;
 
 public class FxComposite extends FxElement {
-	private Rectangle boundBox;
-	private Point topLeft, bottomRight;
 	private List<FxElement> children = new ArrayList<FxElement>();
+	private Point topLeft, bottomRight;
+	private Rectangle boundBox;
 	
 	public FxComposite(String id, Point p, Point q) {
 		super(id);
@@ -32,30 +32,29 @@ public class FxComposite extends FxElement {
 		children.remove(fxElement);
 	}
 	
-	
-	@Override
-	public void onChange(Element element) {
-		setP(element.getP());
-		setQ(element.getQ());
-	}
-	
-	// Not used
-	@Override
-	void setColor(Color color) {
-	}
-	
+	// Setters
 	@Override
 	public void setP(Point p) {
 		this.topLeft = p;
-		update();
 	}
 
 	@Override
 	public void setQ(Point q) {
 		this.bottomRight = q;
+	}
+
+	@Override
+	void setColor(Color color) {
+	} // Not used
+	
+	//Observer
+	@Override
+	public void onChange(Element element) {
+		setP(element.getP());
+		setQ(element.getQ());
 		update();
 	}
-	
+
 	private void update() {
 		boundBox.setWidth(bottomRight.getX() - topLeft.getX());
 		boundBox.setHeight(bottomRight.getY() - topLeft.getY());

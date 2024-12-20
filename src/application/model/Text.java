@@ -3,10 +3,9 @@ package model;
 import common.Color;
 import common.Point;
 import common.ModelInfo;
-import java.util.UUID;
 
 public class Text extends BoxedElement {
-	private String content; // currently immutable
+	private final String content; // currently immutable
 	
 	public Text(String id, Point p, Point q, Color color, String content) {
 		super(id, p, q);

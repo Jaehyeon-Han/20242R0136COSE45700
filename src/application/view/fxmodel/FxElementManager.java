@@ -8,21 +8,26 @@ import java.util.Map;
 import common.Point;
 import common.ModelInfo;
 import model.Element;
-import observer.ModelListObserver;
+import observer.ElementListObserver;
 import observer.SelectedStateObserver;
 import view.DrawingPane;
 import view.HandlerManager;
 
-public class FxElementManager implements ModelListObserver, SelectedStateObserver {
+public class FxElementManager implements ElementListObserver, SelectedStateObserver {
 	private DrawingPane drawingPane;
 	private List<FxElement> fxElements = new ArrayList<>();
 	private Map<String, FxElement> idMap = new HashMap<>();
 	private FxElement selectedFxElement;
 	private String selectedId;
-
+	
 	// Getter
 	public String getSelectedId() {
 		return selectedId;
+	}
+	
+	// Setter
+	public void setDrawingPane(DrawingPane drawingPane) {
+		this.drawingPane = drawingPane;
 	}
 	
 	// Observe model instance creation/deletion
@@ -80,7 +85,7 @@ public class FxElementManager implements ModelListObserver, SelectedStateObserve
 			selectedId = null;
 		}
 	}
-
+	
 	// Singleton
 	private FxElementManager() {
 	}
@@ -91,9 +96,5 @@ public class FxElementManager implements ModelListObserver, SelectedStateObserve
 
 	public static FxElementManager getInstance() {
 		return FxElementManagerHelper.INSTANCE;
-	}
-
-	public void setDrawingPane(DrawingPane drawingPane) {
-		this.drawingPane = drawingPane;
 	}
 }

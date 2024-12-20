@@ -7,5 +7,5 @@ public interface SelectedElementSubject {
 
 	public void removeObserver(SelectedElementObserver observer);
 
-	public void notifyOnChange(Element element);
+	public void notifyChange(Element element);
 }

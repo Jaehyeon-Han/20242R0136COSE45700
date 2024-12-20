@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import common.Point;
-import model.Composite;
 import model.Element;
 import model.ElementFactory;
 import model.ElementManager;
@@ -20,7 +19,7 @@ public class ElementSelector implements SelectedStateSubject {
     	Element currentSelected = selectedElementManager.getSelectedElement();
     	if(currentSelected != null && currentSelected.isHit(p) 
     			&& !elementManager.isInList(currentSelected)) {
-    		notifyOnSelect(currentSelected);
+    		notifySelect(currentSelected);
     		return true;
     	} // Composite is not in the list
     	
@@ -29,13 +28,13 @@ public class ElementSelector implements SelectedStateSubject {
 			Element element = elements.get(i);
 			if (element.isHit(p)) {
 				selectedElementManager.setSelectedElement(element);
-				notifyOnSelect(selectedElementManager.getSelectedElement());
+				notifySelect(selectedElementManager.getSelectedElement());
 				return true;
 			}
 		}
 		
 		selectedElementManager.setSelectedElement(null);
-		notifyOnUnSelect();
+		notifyUnSelect();
 		return false;
 	}
 	
@@ -48,15 +47,15 @@ public class ElementSelector implements SelectedStateSubject {
 		}
 		if(selectedList.size() == 0) {
 			selectedElementManager.setSelectedElement(null);
-			notifyOnUnSelect();
+			notifyUnSelect();
 			return false;
 		} else if(selectedList.size() == 1) {
 			selectedElementManager.setSelectedElement(selectedList.get(0));
 		} else {
-			Composite composite = ElementFactory.getInstance().createComposite(selectedList);
+			Element composite = ElementFactory.getInstance().createComposite(selectedList);
 			selectedElementManager.setSelectedElement(composite); 
 		}
-		notifyOnSelect(selectedElementManager.getSelectedElement());
+		notifySelect(selectedElementManager.getSelectedElement());
 		return true;
 	}
 
@@ -69,13 +68,13 @@ public class ElementSelector implements SelectedStateSubject {
         observers.remove(observer);
     }
     
-	public void notifyOnSelect(Element selectedElement) {
+	public void notifySelect(Element selectedElement) {
 		for(SelectedStateObserver observer: observers) {
 			observer.onSelect(selectedElement);
 		}
 	}
 
-	public void notifyOnUnSelect() {
+	public void notifyUnSelect() {
 		for(SelectedStateObserver observer: observers) {
 			observer.onUnSelect();
 		}

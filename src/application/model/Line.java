@@ -12,6 +12,7 @@ public class Line extends Element {
 		this.color = color;
 	}
 
+	@Override
 	public Color getColor() {
 		return color;
 	}
@@ -69,7 +70,7 @@ public class Line extends Element {
 	        p.getX() + directionX * width,
 	        p.getY() + directionY * width
 	    );
-	    notifyOnChange();
+	    notifyChange();
 	}
 
 	@Override

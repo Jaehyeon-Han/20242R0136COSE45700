@@ -12,19 +12,13 @@ public class MultiSelectState implements ToolState {
     private Rectangle selectionBox;
 
     public MultiSelectState(DrawingPane drawingPane, double startX, double startY) {
-        System.out.println("MultiSelect State");
-        this.startX = startX;
+    	this.drawingPane = drawingPane;
+    	this.startX = startX;
         this.startY = startY;
-        this.drawingPane = drawingPane;
 
         initializeSelectionBox();
 
         drawingPane.add(selectionBox);
-    }
-
-    @Override
-    public void handleMousePressed(double x, double y) {
-        // It always transits from SelectState
     }
 
     @Override

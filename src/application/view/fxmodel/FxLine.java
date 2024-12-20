@@ -12,12 +12,12 @@ public class FxLine extends FxElement {
 	
 	public FxLine(String id, Point p, Point q, Color color) {
 		super(id);
-		this.color = color;
 		
 		fxLine = new Line(p.getX(), p.getY(), q.getX(), q.getY());
 		this.setColor(color);
 	}
 
+	// Setters
 	@Override
 	public void setP(Point p) {
 		fxLine.setStartX(p.getX());
@@ -36,6 +36,7 @@ public class FxLine extends FxElement {
 		fxLine.setStroke(color.toFxColor());
 	}
 
+	// Observer
 	@Override
 	public void onChange(Element element) {
 		setP(element.getP());

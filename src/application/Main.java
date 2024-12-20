@@ -13,13 +13,15 @@ public class Main {
 	}
 
 	private static void setObservers() {
-		ElementSelector selector = ElementSelector.getInstance();
+		FxElementManager fxElementManager = FxElementManager.getInstance();
+		ElementSelector elementSelector = ElementSelector.getInstance();
+		HandlerManager handlerManager = HandlerManager.getInstance();
+		
+		ElementManager.getInstance().addObserver(fxElementManager);
+		
+		elementSelector.addObserver(fxElementManager);
+		elementSelector.addObserver(handlerManager);
 
-		ElementManager.getInstance().addObserver(FxElementManager.getInstance());
-
-		selector.addObserver(FxElementManager.getInstance());
-		selector.addObserver(HandlerManager.getInstance());
-
-		SelectedElementManager.getInstance().addObserver(HandlerManager.getInstance());
+		SelectedElementManager.getInstance().addObserver(handlerManager);
 	}
 }

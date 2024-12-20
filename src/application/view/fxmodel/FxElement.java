@@ -3,9 +3,9 @@ package view.fxmodel;
 import common.Color;
 import common.Point;
 import javafx.scene.Node;
-import observer.ModelChangeObserver;
+import observer.ElementObserver;
 
-public abstract class FxElement implements ModelChangeObserver {
+public abstract class FxElement implements ElementObserver {
 	private final String id;
 	
 	protected FxElement(String id) {

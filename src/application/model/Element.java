@@ -6,14 +6,14 @@ import java.util.List;
 import common.Color;
 import common.Point;
 import common.ModelInfo;
-import observer.ModelChangeObserver;
-import observer.ModelChangeSubject;
+import observer.ElementObserver;
+import observer.ElementSubject;
 
-public abstract class Element implements ModelChangeSubject {
+public abstract class Element implements ElementSubject {
 	protected String id;
 	protected Point p, q;
 	protected Color color = new Color(0, 0, 0); // Image는 색이 없으나 공통 상위 클래스 편의성을 위해
-	protected List<ModelChangeObserver> observers = new ArrayList<>();
+	protected List<ElementObserver> observers = new ArrayList<>();
 	
 	public Element(String id, Point p, Point q) {
 		this.id = id;
@@ -28,6 +28,14 @@ public abstract class Element implements ModelChangeSubject {
 	
 	public Point getP() {
 		return p;
+	}	
+	
+	public Point getQ() {
+		return q;
+	}
+
+	public Color getColor() {
+		return color;
 	}
 	
 	public void setP(Point p) {
@@ -35,11 +43,7 @@ public abstract class Element implements ModelChangeSubject {
 			return;
 		}
 		this.p = p;
-		notifyOnChange();
-	}
-
-	public Point getQ() {
-		return q;
+		notifyChange();
 	}
 	
 	public void setQ(Point q) {
@@ -47,16 +51,12 @@ public abstract class Element implements ModelChangeSubject {
 			return;
 		}
 		this.q = q;
-		notifyOnChange();
-	}
-
-	public Color getColor() {
-		return color;
+		notifyChange();
 	}
 
 	public void setColor(Color color) {
 		this.color = color;
-		notifyOnChange();
+		notifyChange();
 	}
 	
 	abstract public double getWidth();
@@ -70,7 +70,7 @@ public abstract class Element implements ModelChangeSubject {
 		p.setY(p.getY() + dy);
 		q.setX(q.getX() + dx);
 		q.setY(q.getY() + dy);
-		notifyOnChange();
+		notifyChange();
 	}
 	
 	// Hit test
@@ -87,16 +87,16 @@ public abstract class Element implements ModelChangeSubject {
 	public abstract ModelInfo getModelInfo();
 	
 	// ModelChange Subject
-	public void addObserver(ModelChangeObserver observer) {
+	public void addObserver(ElementObserver observer) {
 		observers.add(observer);
 	}
 	
-	public void removeObserver(ModelChangeObserver observer) {
+	public void removeObserver(ElementObserver observer) {
 		observers.remove(observer);
 	}
 	
-	public void notifyOnChange() {
-		for(ModelChangeObserver observer: observers) {
+	public void notifyChange() {
+		for(ElementObserver observer: observers) {
 			observer.onChange(this);
 		}
 	}

@@ -12,11 +12,10 @@ import view.DrawingPane;
 import view.ToolWindow;
 
 public class CreateState implements ToolState {
-	private double startX, startY, endX, endY;
 	private DrawingPane drawingPane;
-
+	private double startX, startY, endX, endY;
+	
 	public CreateState(DrawingPane drawingPane) {
-		System.out.println("Create State");
 		this.drawingPane = drawingPane;
 	}
 	
@@ -31,12 +30,16 @@ public class CreateState implements ToolState {
 		endX = x;
 		endY = y;
 
-		ToolWindow toolWindow = drawingPane.getToolWindow();
-		// 책임 분리 필요?
-		String type = toolWindow.getType();
 		Point p = new Point(startX, startY);
 		Point q = new Point(endX, endY);
-		// p, q를 바운드 박스 형태로 변환
+
+		CreateCommand createCommand = new CreateCommand(createCreateInfo(p, q));
+		CommandInvoker.getInstance().execute(createCommand);
+	}
+	
+	private CreateInfo createCreateInfo(Point p, Point q) {
+		ToolWindow toolWindow = drawingPane.getToolWindow();
+		String type = toolWindow.getType();
 		Color color = toolWindow.getColor();
 		String text = toolWindow.getText();
 		File selectedImageFile = toolWindow.getImageFile();
@@ -46,8 +49,7 @@ public class CreateState implements ToolState {
 		.setImageFile(selectedImageFile)
 		.setText(text)
 		.build();
-
-		CreateCommand createCommand = new CreateCommand(info);
-		CommandInvoker.getInstance().execute(createCommand);
+		
+		return info;
 	}
 }

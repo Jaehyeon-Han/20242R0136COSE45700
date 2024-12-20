@@ -4,13 +4,6 @@ import java.io.File;
 
 import common.Color;
 import common.Point;
-import model.Element;
-import model.ElementFactory;
-import model.Ellipse;
-import model.Image;
-import model.Line;
-import model.Rectangle;
-import model.Text;
 
 public class FxElementFactory {
 	public FxElement create(String id, String type, Point p, Point q, 

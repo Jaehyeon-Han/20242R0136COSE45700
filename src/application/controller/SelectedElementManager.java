@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Element;
-import observer.ModelChangeObserver;
+import observer.ElementObserver;
 import observer.SelectedElementObserver;
 import observer.SelectedElementSubject;
 
-public class SelectedElementManager implements ModelChangeObserver, SelectedElementSubject {
+public class SelectedElementManager implements ElementObserver, SelectedElementSubject {
 	private Element selectedElement;
-	List<SelectedElementObserver> observers = new ArrayList<>();
+	private List<SelectedElementObserver> observers = new ArrayList<>();
 
 	public Element getSelectedElement() {
 		return selectedElement;
@@ -42,7 +42,7 @@ public class SelectedElementManager implements ModelChangeObserver, SelectedElem
 		observers.remove(observer);
 	}
 
-	public void notifyOnChange(Element element) {
+	public void notifyChange(Element element) {
 		for (SelectedElementObserver observer : observers) {
 			observer.onChange(element);
 		}
@@ -51,7 +51,7 @@ public class SelectedElementManager implements ModelChangeObserver, SelectedElem
 	// Observing Selected Element
 	@Override
 	public void onChange(Element element) {
-		notifyOnChange(element);
+		notifyChange(element);
 	}
 
 	// Singleton

@@ -2,7 +2,6 @@ package view;
 
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import view.fxmodel.FxElement;
 import view.state.CreateState;
 import view.state.ToolState;
 
@@ -14,14 +13,6 @@ public class DrawingPane extends Pane {
 		this.setStyle("-fx-border-color: #000000; -fx-border-width: 1px;");
 		this.setPrefSize(700, 500);
 		initializeMouseEventListeners();
-	}
-	
-	public void setToolWindow(ToolWindow toolWindow) {
-		this.toolWindow = toolWindow;
-	}
-	
-	public ToolWindow getToolWindow() {
-		return this.toolWindow;
 	}
 
 	private void initializeMouseEventListeners() {
@@ -36,10 +27,6 @@ public class DrawingPane extends Pane {
 		});
 	}
 	
-//	public void add(FxElement element) {
-//		this.getChildren().add(element.getNode());
-//	}
-	
 	public void add(Node node) {
 		this.getChildren().add(node);
 	}
@@ -52,5 +39,13 @@ public class DrawingPane extends Pane {
 	
 	public void setCurrentState(ToolState state) {
 		currentState = state;
+	}
+	
+	public void setToolWindow(ToolWindow toolWindow) {
+		this.toolWindow = toolWindow;
+	}
+	
+	public ToolWindow getToolWindow() {
+		return this.toolWindow;
 	}
 }

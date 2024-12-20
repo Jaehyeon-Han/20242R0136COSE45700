@@ -2,6 +2,6 @@ package observer;
 
 import model.Element;
 
-public interface ModelChangeObserver {
+public interface ElementObserver {
 	void onChange(Element element);
 }

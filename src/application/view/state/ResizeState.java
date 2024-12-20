@@ -12,11 +12,10 @@ public class ResizeState implements ToolState {
 	private String id;
 	
 	public ResizeState(DrawingPane drawingPane, String id, double startX, double startY) {
-		System.out.println("Resize State");
 		this.drawingPane = drawingPane;
-		this.id = id;
 		this.startX = startX;
 		this.startY = startY;
+		this.id = id;
 	}
 	
 	@Override

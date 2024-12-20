@@ -20,7 +20,7 @@ public class ElementFactory {
 		}
 	}
 	
-	public Composite createComposite(List<Element> elements) {
+	public Element createComposite(List<Element> elements) {
 		String id = UUID.randomUUID().toString();
 			Composite composite = new Composite(id);
 			for(Element element : elements) {
