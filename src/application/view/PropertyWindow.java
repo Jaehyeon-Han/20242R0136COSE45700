@@ -8,6 +8,7 @@ import command.SetDimensionCommand;
 import command.SetColorCommand;
 import command.TranslateCommand;
 import common.Color;
+
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;

@@ -19,7 +19,7 @@ public class MainView extends Application {
 		drawingPane = new DrawingPane();
 		toolWindow = new ToolWindow(drawingPane, primaryStage, 300, 150);
 		propertyWindow = new PropertyWindow(300, 350);
-		
+
 		setModelDependencies();
 		setViewDependencies();
 		
@@ -36,7 +36,6 @@ public class MainView extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-
 
 	private void setModelDependencies() {
 		ElementSelector.getInstance().addObserver(propertyWindow);
