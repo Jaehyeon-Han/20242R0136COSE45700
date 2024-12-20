@@ -4,9 +4,9 @@
 
 ## 전체 구조 클래스 다이어그램: 이벤트 흐름은 12시부터 반시계 진행
 ![UML Class Diagram](https://github.com/user-attachments/assets/31351028-2213-4293-ab06-876c78519992)
+일부 getter와 setter, private method, 구체 클래스의 의존성은 다이어그램의 간결성을 위해 생략하였다.
 
 ## 사용한 디자인 패턴과 목적
-
 1. State Pattern: 사용자의 마우스 이벤트를 분기 없이 처리하기 위해 사용하였다. ToolState 인터페이스를 정의하고 각 State 클래스에서 마우스 이벤트를 처리하고, 다음 상태로 전이하였다.
 2: Abstract Factory Pattern: Element와 FxElement의 생성 책임을 팩토리로 위임하였다.
 3. Singleton Pattern: 다수의 객체가 필요하지 않고 전역적으로 접근하면 편리한 Factory와 ElementSelector 등에 사용하였다. 단위 테스트가 어렵고, 싱글톤 객체에 대한 의존성이 증가하는 경향이 있어 더 좋은 구조를 찾아보면 좋을 것 같다.
@@ -14,7 +14,7 @@
 5. Command Pattern: 뷰에서 모델 방향으로의 의존성을 줄이기 위해 사용하였다.
 6. Observer Pattern: 모델에서 뷰로의 의존성을 줄이기 위해 사용하였다. 또한 컨트롤러 역할로 볼 수 있는 ElementSelector와 SelectedElementManager에서도 이벤트 기반 호출을 위해 사용하였다.
 
-<!-
+<!--
 목표: 개방-폐쇄 원칙, 단일 책임 원칙, 의존성 역전 원칙을 지키는 방식으로 클래스 설계 및 구현
 1. 개방-폐쇄 원칙: Model 클래스의 종류가 늘어났을 때 기존 코드는 수정하지 않고 새로운 클래스만 추가하면 되는가?
    - 모델 클래스의 설계 자체가 변경될 가능성을 배제할 수 없다. 특히 상속을 사용하면 더욱.
